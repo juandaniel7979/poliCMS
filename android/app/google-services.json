@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "744841622286",
+    "project_id": "poli---cms",
+    "storage_bucket": "poli---cms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744841622286:android:eb8055260b9e700985dd5f",
+        "android_client_info": {
+          "package_name": "com.poliCMS.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744841622286-a47flabgbdbtbp13sr73gos55fbn4p57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBajh0bslk945PCM6Rpig_hSXQceBREX-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744841622286-a47flabgbdbtbp13sr73gos55fbn4p57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

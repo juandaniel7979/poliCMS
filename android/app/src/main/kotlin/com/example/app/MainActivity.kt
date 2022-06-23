@@ -1,0 +1,6 @@
+package com.poliCMS.app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
