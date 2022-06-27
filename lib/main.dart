@@ -8,6 +8,8 @@ import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:app/screens/crud_content/edit_subcategories.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
 import 'package:app/screens/home_screen_student.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './screens/home_screen.dart';
@@ -18,9 +20,10 @@ import './screens/crud_content/Authentication/signup_student_screen.dart';
 import './screens/getting_started.dart';
 import './screens/access_code.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  await Firebase.initializeApp();
+  runApp( MyApp());
 
 }
 
@@ -47,6 +50,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       home: GettingStarted(),
+      // home: MainPage(),
       routes: {
         GettingStarted.routeName: (_) => GettingStarted(),
         HomeScreen.route: (BuildContext context) =>
@@ -133,6 +137,17 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+          return HomeScreen(id: id, email: email, name: name);
+          }else{
+            return GettingStarted();
+          }
+        },
+      ),
+    );
   }
 }

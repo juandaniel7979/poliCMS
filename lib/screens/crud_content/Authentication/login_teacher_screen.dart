@@ -1,5 +1,6 @@
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
@@ -34,6 +35,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
   String errorMessage = '';
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  var jsonResponse = null;
 
 
   String msg = '';
@@ -42,50 +44,60 @@ class _LoginPageState extends State<LoginPageTeacher> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String correo = emailController.text;
     String contrasena = passwordController.text;
-    var jsonResponse = null;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context)=>Center(child: CircularProgressIndicator()),
+    );
     var url ="https://poli-cms.herokuapp.com/api/user/login-profesor";
 
-    var response = await http.post(Uri.parse(url), body: {'correo': correo, 'contrasena' : contrasena});
-    if(response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      // print('Response body ${jsonResponse['data']['user']['_id']}');
-      if(jsonResponse != null) {
+
+    try{
+      // await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo.trim(), password: contrasena.trim());
+      var response = await http.post(Uri.parse(url), body: {'correo': correo.trim(), 'contrasena' : contrasena});
+      if(response.statusCode == 200) {
+        jsonResponse = json.decode(response.body);
+        if(jsonResponse != null) {
+          setState(() {
+            _isLoading = false;
+          });
+          sharedPreferences.setString("token", jsonResponse['data']['token']);
+          // sharedPreferences.setString("id", jsonResponse['data']['user']['_id']);
+          // sharedPreferences.setString("email",  jsonResponse['data']['user']['correo']);
+          // sharedPreferences.setString("name", jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2']);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],name: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
+        }
+      }
+      else {
         setState(() {
           _isLoading = false;
         });
-        sharedPreferences.setString("token", jsonResponse['data']['token']);
-        sharedPreferences.setString("id", jsonResponse['data']['user']['_id']);
-        sharedPreferences.setString("email",  jsonResponse['data']['user']['correo']);
-        sharedPreferences.setString("name", jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2']);
-
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],name: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
+        jsonResponse = json.decode(response.body);
+        msg= jsonResponse['message'];
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text(jsonResponse['message']),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: new Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
+
+    }on FirebaseAuthException catch(e){
+      print(e);
     }
-    else {
-      setState(() {
-        _isLoading = false;
-      });
-      jsonResponse = json.decode(response.body);
-      msg= jsonResponse['message'];
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text(jsonResponse['message']),
-            actions: <Widget>[
-              ElevatedButton(
-                child: new Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+
+
   }
 
   @override
@@ -94,6 +106,12 @@ class _LoginPageState extends State<LoginPageTeacher> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.green,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         title: Center(
           child:Text('Iniciar Sesion'),
         ),

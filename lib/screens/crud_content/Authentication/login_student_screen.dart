@@ -1,6 +1,7 @@
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/home_screen_student.dart';
 import 'package:app/screens/crud_content/Authentication/signup_student_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -28,29 +29,38 @@ class LoginPageStudent extends StatefulWidget{
 
 class _LoginPageStudentState extends State<LoginPageStudent> {
   final _keyForm = GlobalKey<FormState>();
+  final auth = FirebaseAuth.instance;
   bool _isLoading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  var jsonResponse = null;
   var msg = '';
 
 
   Future _login(String email, pass) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // Map data = {
-    //   'email': email,
-    //   'password': pass
-    // };
+
     String correo = emailController.text;
     String contrasena = passwordController.text;
-    var jsonResponse = null;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context)=>Center(child: CircularProgressIndicator()),
+    );
+
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo.trim(), password: contrasena.trim());
+    }on FirebaseAuthException catch(e){
+      print(e);
+    }
+
     var url ="https://poli-cms.herokuapp.com/api/user/login-estudiante";
 
     var response = await http.post(Uri.parse(url), body: {'correo': correo, 'contrasena' : contrasena});
     if(response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      print('Response body ${jsonResponse['data']['user']['_id']}');
+
       if(jsonResponse != null) {
         setState(() {
           _isLoading = false;

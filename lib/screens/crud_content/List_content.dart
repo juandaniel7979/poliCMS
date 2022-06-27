@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // String email='';
 
 
-class DetailContentPage extends StatelessWidget {
+class ListContentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +23,7 @@ class DetailContentPage extends StatelessWidget {
   }
 }
 class ListContent extends StatefulWidget{
-  static const route = '/Detail-Content';
+  static const route = '/list-content';
 
   final String id;
   final String id_subcategoria;
@@ -34,19 +34,19 @@ class ListContent extends StatefulWidget{
 
   ListContent({required this.id,required this.id_subcategoria, required this.email,required this.name,required this.subcategoria,required this.descripcion});
 
-  _DetailContentState createState() => _DetailContentState();
+  _ListContentState createState() => _ListContentState();
 }
 
 quill.QuillController _controller = quill.QuillController.basic();
 
-class _DetailContentState extends State<ListContent> {
+class _ListContentState extends State<ListContent> {
   late List data= [];
   late List descripcion= [];
   // late Map<String,dynamic> descripcion2='';
 
-  var MyJson = '';
+  String MyJson = '';
 
-  Future<List> _getData() async {
+  void _getData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // var url='https://poli-cms.herokuapp.com/api/contenido/contenidos?id=${widget.id_subcategoria}';
     var url='https://poli-cms.herokuapp.com/api/contenido/contenido';
@@ -60,26 +60,30 @@ class _DetailContentState extends State<ListContent> {
     // print(res);
     this.setState(() {
       data = res['contenido'];
-    // descripcion= res['contenido']['descripcion_2'][0];
-    // descripcion2 = map(res['contenido']['descripcion_2']);
+      descripcion= res['contenido']['descripcion_2'];
+      // MyJson= jsonEncode(res['contenido']['descripcion_2']);
+      // descripcion2 = map(res['contenido']['descripcion_2']);
       // res['contenido']['descripcion_2'].toString();
-    // descripcion=jsonDecode(descripcion2);
-    // MyJson =jsonDecode(res['contenido']['descripcion_2']);
+      // descripcion=jsonDecode(descripcion2);
+      // MyJson =jsonDecode(res['contenido']['descripcion_2']);
     });
-    // print(res['contenido']['descripcion_2'][0]);
-    print('el tamano de la lista es: ${descripcion.length}');
 
-    return res['contenido']['descripcion_2'];
+    // print(res['contenido']['descripcion_2'].toString());
+    // print(res['contenido']['descripcion_2'][0]);
+    // print('el tamano de la lista es: ${descripcion.length}');
+
+
+    // return res['contenido']['descripcion_2'];
 
   }
 
-void getDescripcionesQuill(){
+  void getDescripcionesQuill(){
     List<Widget> quillPlantilla = [];
 
     for (var i = 0; i < descripcion.length; i++) {
 
     }
-}
+  }
 
   @override
   void initState() {
@@ -91,80 +95,39 @@ void getDescripcionesQuill(){
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.subcategoria),
+        title: Text(widget.subcategoria +'list'),
       ),
       drawer: MainDrawer(id:widget.id,email:widget.email,name: widget.name),
       body:new ListView.builder(
         itemCount: data ==null ? 0 :data.length,
         itemBuilder: (BuildContext context,int index){
-          return new GestureDetector(
-            onTap: (){
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ListContent(id: data[index]['id_subcategoria'],email: widget.email,name: widget.name,categoria: data[index]['nombre'],descripcion:data[index]['descripcion'] ,)));
-            },
-            child:
-            Card(
-              child:Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.album),
-                      title: Text('Categoria: '+data[index]['nombre'],
-                        style: TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle:
-                      Text('Descripcion: '+data[index]['descripcion_2'][0]),
-                      // quill.QuillEditor.basic(controller: _controller = quill.QuillController(document: quill.Document.fromJson(descripcion[0]), selection: TextSelection.collapsed(offset: 0)), readOnly: false)
-                    ),
-
-
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        TextButton(
-                          child: const Text('EDIT'),
-                          onPressed: () {/* ... */},
-                        ),
-                        const SizedBox(width: 8),
-                        TextButton(
-                          child: const Text('DELETE',
-                          style: TextStyle(color: Colors.red),
-                          ),
-                          onPressed: () {
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
-                    Expanded(
-                        child:Padding(
-                          padding: const EdgeInsets.all(7.0),
-                          child: Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    // BoxShadow(
-                                    //   color: Colors.lightBlueAccent,
-                                    //   offset:const Offset(5.0, 5.0),
-                                    //   blurRadius:10.0,
-                                    //   spreadRadius:2.0
-                                    // ),
-                                    BoxShadow(
-                                      color: Colors.white,
-                                      offset:const Offset(-5.5, 0.0,),
-                                      blurRadius:0.0,
-                                      spreadRadius:0.0,
-                                    ),
-                                  ]
+          return new Column(
+              children: [
+                Expanded(
+                    child:Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              // BoxShadow(
+                              //   color: Colors.lightBlueAccent,
+                              //   offset:const Offset(5.0, 5.0),
+                              //   blurRadius:10.0,
+                              //   spreadRadius:2.0
+                              // ),
+                              BoxShadow(
+                                color: Colors.white,
+                                offset:const Offset(-5.5, 0.0,),
+                                blurRadius:0.0,
+                                spreadRadius:0.0,
                               ),
-                              child:
-                              quill.QuillEditor.basic(controller: _controller = quill.QuillController(document: quill.Document.fromJson(descripcion), selection: TextSelection.collapsed(offset: 0)), readOnly: false)
-                            // _controller = quill.QuillController(document: quill.Document.fromJson(data[index]['descripcion_2']), selection: TextSelection.collapsed(offset: 0)),
-
-                          ),
-                        )
-                    ),
-                  ]
-              ),
-            ),
+                            ]
+                        ),
+                        child: quill.QuillEditor.basic(controller: _controller = quill.QuillController(document: quill.Document.fromDelta(jsonDecode(jsonEncode(data[index]['descripcion_2']))), selection: TextSelection.collapsed(offset: 0)), readOnly: false),
+                      ),
+                    )
+                ),
+              ]
           );
 
         },

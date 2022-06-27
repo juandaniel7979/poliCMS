@@ -1,0 +1,29 @@
+[
+  {
+    "insert": "_controller.document.toDelta().toJson()\n\n"
+  },
+  {
+    "insert": "Carnes",
+    "attributes": {
+      "bold": true
+    }
+  },
+  {
+    "insert": "\nmaricadas"
+  },
+  {
+    "insert": "\n",
+    "attributes": {
+      "list": "ordered"
+    }
+  },
+  {
+    "insert": "Al azar"
+  },
+  {
+    "insert": "\n",
+    "attributes": {
+      "list": "ordered"
+    }
+  }
+]

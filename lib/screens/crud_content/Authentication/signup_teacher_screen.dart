@@ -1,6 +1,7 @@
 import 'package:app/screens/crud_content/Authentication/login_student_screen.dart';
 import 'package:app/screens/crud_content/Authentication/login_teacher_screen.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreenTeacher extends StatelessWidget {
   static const routeName = '/signup-teacher';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +27,7 @@ class SignupPageTeacher extends StatefulWidget{
 class _SignupPageState extends State<SignupPageTeacher> {
 
   final _keyForm = GlobalKey<FormState>();
+  final auth = FirebaseAuth.instance;
 
   bool visible = false;
   final uidController = TextEditingController();
@@ -53,19 +56,39 @@ class _SignupPageState extends State<SignupPageTeacher> {
       var jsonResponse = null;
       var url ="https://poli-cms.herokuapp.com/api/user/register-profesor";
 
+
+      showDialog(context: context,barrierDismissible: false, builder: (context)=>Center(child: CircularProgressIndicator()));
       var response = await http.post(Uri.parse(url), body: {'uid':uid,'nombre':nombre,'nombre_2':nombre2,'apellido':apellido,'apellido_2':apellido2,'correo': correo, 'contrasena' : contrasena});
       if(response.statusCode == 200) {
+        try{
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correo.trim(), password: contrasena);
+        }on FirebaseAuthException catch(e){
+          print(e);
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return AlertDialog(
+          //       title: new Text('Ha fallado el registro'),
+          //       actions: <Widget>[
+          //         ElevatedButton(
+          //           child: new Text("OK"),
+          //           onPressed: () {
+          //             Navigator.pop(context);
+          //           },
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
+        }
         jsonResponse = json.decode(response.body);
-        // print('Response status: ${response.statusCode}');
-        // print('Response body: ${response.body}');
         if(jsonResponse != null) {
           sharedPreferences.setString("token", jsonResponse['data']['token']);
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreenTeacher()), (Route<dynamic> route) => false);
+          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreenTeacher()), (Route<dynamic> route) => false);
         }
       }
       else {
         jsonResponse = json.decode(response.body);
-        msg= jsonResponse['message'];
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -350,7 +373,9 @@ class _SignupPageState extends State<SignupPageTeacher> {
 
                           if(_keyForm.currentState!.validate()){
                             print("validacion exitosa");
+                            auth.createUserWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim()).then((_){
                             _signup();
+                            });
                           }else{
                             print("validacion exitosa");
                           }

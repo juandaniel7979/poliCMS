@@ -149,8 +149,11 @@ class _AddContentState extends State<AddContent> {
                 ),
                 OutlinedButton(onPressed: (){
                   var Myjson= jsonEncode(_controller.document.toDelta().toJson());
-                  print(_controller.document.toDelta().toJson());
                   print('el json');
+                  print(_controller.document.toDelta().toJson());
+                  print('en texto plano');
+                  print(_controller.document.toPlainText());
+                  // var jsonObj = json.
                   print(Myjson);
               }, child:Texto.Text('Agregar contenido',style:Texto.TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
                 style:
