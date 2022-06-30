@@ -1,4 +1,5 @@
 import 'package:app/screens/crud_content/Authentication/login_student_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -101,48 +102,71 @@ class _SignupPageState extends State<SignupPageStudent> {
   //         }
   // }
   Future _signup() async {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      String uid = uidController.text;
-      String correo = emailController.text;
-      String nombre = nombreController.text;
-      String nombre2 = nombre2Controller.text;
-      String apellido = apellidoController.text;
-      String apellido2 = apellido2Controller.text;
-      String contrasena = passwordController.text;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String uid = uidController.text;
+    String correo = emailController.text;
+    String nombre = nombreController.text;
+    String nombre2 = nombre2Controller.text;
+    String apellido = apellidoController.text;
+    String apellido2 = apellido2Controller.text;
+    String contrasena = passwordController.text;
     var jsonResponse = null;
     var url ="https://poli-cms.herokuapp.com/api/user/register-estudiante";
 
-    var response = await http.post(Uri.parse(url), body: {'uid':uid,'nombre':nombre,'nombre_2':nombre2,'apellido':apellido,'apellido_2':apellido2,'correo': correo, 'contrasena' : contrasena});
-    if(response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      print('Response body ${jsonResponse['data']['user']['_id']}');
-      if(jsonResponse != null) {
-        sharedPreferences.setString("token", jsonResponse['data']['token']);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreenStudent()), (Route<dynamic> route) => false);
-      }
-    }
-    else {
-      jsonResponse = json.decode(response.body);
-      msg= jsonResponse['message'];
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text(jsonResponse['message']),
-            actions: <Widget>[
-              ElevatedButton(
-                child: new Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+
+    showDialog(context: context,barrierDismissible: false, builder: (context)=>Center(child: CircularProgressIndicator()));
+
+      try{
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correo.trim(), password: contrasena);
+        var response = await http.post(Uri.parse(url), body: {'uid':uid,'nombre':nombre,'nombre_2':nombre2,'apellido':apellido,'apellido_2':apellido2,'correo': correo, 'contrasena' : contrasena});
+          if(response.statusCode == 200) {
+            jsonResponse = json.decode(response.body);
+            print(response.body);
+            if(jsonResponse != null) {
+              print('Llego aqui');
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreenStudent()), (Route<dynamic> route) => false);
+            }
+          }else {
+          jsonResponse = json.decode(response.body);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: new Text(jsonResponse['message']),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: new Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
           );
-        },
-      );
-    }
+        }
+      }on FirebaseAuthException catch(e){
+        print(e);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              // title: new Text('Ha fallado el registro'),
+              title: new Text(e.toString()),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: new Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+
   }
 
   @override

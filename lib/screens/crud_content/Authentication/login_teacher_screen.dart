@@ -1,3 +1,4 @@
+import 'package:app/screens/getting_started.dart';
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -106,12 +107,12 @@ class _LoginPageState extends State<LoginPageTeacher> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context,GettingStarted.routeName);
+          },
+        ),
         title: Center(
           child:Text('Iniciar Sesion'),
         ),
@@ -127,7 +128,8 @@ class _LoginPageState extends State<LoginPageTeacher> {
       body: Container(
         padding: const EdgeInsets.all(15),
         color: Theme.of(context).primaryColor,
-        width: double.infinity,
+        // width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         child: Form(
           key: _keyForm,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -154,7 +156,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: 'Email',
+                  hintText: 'Correo',
                   contentPadding: const EdgeInsets.all(15),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -197,19 +199,25 @@ class _LoginPageState extends State<LoginPageTeacher> {
               SizedBox(
                 height: 20,
               ),
-              FlatButton(
+              OutlinedButton(
                 child: Text(
-                  'Login',
+                  'Iniciar Sesion',
                   style: TextStyle(
                     fontSize: 20,
                   ),
                 ),
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: const EdgeInsets.all(15),
-                textColor: Colors.white,
+                  style:
+                  OutlinedButton.styleFrom(
+                      primary: Colors.white,
+                      surfaceTintColor: Colors.green,
+                      shadowColor: Colors.green,
+                      // backgroundColor: Colors.green,
+                      padding: EdgeInsets.all(13),
+                      side: BorderSide(color: Colors.white,width: 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )
+                  ),
                 onPressed: () async {
                   if(_keyForm.currentState!.validate()){
                     print("validacion exitosa");
@@ -225,19 +233,25 @@ class _LoginPageState extends State<LoginPageTeacher> {
               SizedBox(
                 height: 20,
               ),
-              FlatButton(
-                child: Text(
-                  'Sign up',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+          OutlinedButton(
+              child: Text(
+                'Registrarse',
+                style: TextStyle(
+                  fontSize: 20,
                 ),
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: const EdgeInsets.all(15),
-                textColor: Colors.white,
+              ),
+              style:
+              OutlinedButton.styleFrom(
+                  primary: Colors.white,
+                  surfaceTintColor: Colors.green,
+                  shadowColor: Colors.green,
+                  // backgroundColor: Colors.green,
+                  padding: EdgeInsets.all(13),
+                  side: BorderSide(color: Colors.white,width: 2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  )
+              ),
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, SignupScreenTeacher.routeName);
                 },

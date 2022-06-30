@@ -1,3 +1,4 @@
+import 'package:app/screens/getting_started.dart';
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/home_screen_student.dart';
 import 'package:app/screens/crud_content/Authentication/signup_student_screen.dart';
@@ -100,16 +101,16 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.green,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context,GettingStarted.routeName);
+          },
+        ),
         title: Center(
           child:Text('Iniciar Sesion'),
         ),
         elevation: 0,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back_ios),
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },
-        // ),
       ),
       body: Container(
         padding: const EdgeInsets.all(15),
@@ -119,14 +120,11 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
           key: _keyForm,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
-
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Image.network(
-              //   'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-              //   height: 180,
-              // ),
+
               Image.asset("assets/images/login.png",
                 height: 180
               ),
@@ -144,7 +142,7 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: 'Email',
+                  hintText: 'Correo',
                   contentPadding: const EdgeInsets.all(15),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -181,20 +179,26 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
               SizedBox(
                 height: 20,
               ),
-              FlatButton(
+              OutlinedButton(
                 child: Text(
                   'Iniciar Sesion',
                   style: TextStyle(
                     fontSize: 20,
                   ),
                 ),
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2),
-                  borderRadius: BorderRadius.circular(5),
+                style:
+                OutlinedButton.styleFrom(
+                    primary: Colors.white,
+                    surfaceTintColor: Colors.green,
+                    shadowColor: Colors.green,
+                    // backgroundColor: Colors.green,
+                    padding: EdgeInsets.all(13),
+                    side: BorderSide(color: Colors.white,width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )
                 ),
-                padding: const EdgeInsets.all(15),
-                textColor: Colors.white,
-                onPressed: () {
+                onPressed: () async {
                   if(_keyForm.currentState!.validate()){
                     print("validacion exitosa");
                     String correo = emailController.text;
@@ -203,27 +207,31 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
                       _isLoading = true;
                     });
                     _login(correo,contrasena);
-                  }else{
-                    print("validacion fallida");
                   }
                 },
               ),
               SizedBox(
                 height: 20,
               ),
-              FlatButton(
+              OutlinedButton(
                 child: Text(
-                  'Sign up',
+                  'Registrarse',
                   style: TextStyle(
                     fontSize: 20,
                   ),
                 ),
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2),
-                  borderRadius: BorderRadius.circular(5),
+                style:
+                OutlinedButton.styleFrom(
+                    primary: Colors.white,
+                    surfaceTintColor: Colors.green,
+                    shadowColor: Colors.green,
+                    // backgroundColor: Colors.green,
+                    padding: EdgeInsets.all(13),
+                    side: BorderSide(color: Colors.white,width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )
                 ),
-                padding: const EdgeInsets.all(15),
-                textColor: Colors.white,
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, SignupScreenStudent.routeName);
                 },
