@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/Widgets/main_drawer.dart';
+import 'package:app/Widgets/search_widget.dart';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
@@ -44,7 +45,10 @@ class ListSubcategories extends StatefulWidget{
 }
 
 class _ListSubcategoriesState extends State<ListSubcategories> {
+
+  late List subcategorias =[];
   late List data= [];
+  String query = '';
   Future<List> _getData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var url='https://poli-cms.herokuapp.com/api/subcategoria/subcategorias?id=${widget.id_categoria}';
@@ -58,8 +62,13 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
     var res = jsonDecode(response.body);
     // print(res['subcategoria']);
 
+
     this.setState(() {
       data = res['subcategoria'];
+      subcategorias=data;
+      print('data');
+      print(data.toString());
+      print(subcategorias[0]['nombre']);
     });
 
     return res['subcategoria'];
@@ -128,17 +137,17 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       ),
       drawer: MainDrawer(id:widget.id,email:widget.email,name: widget.name),
       body:new ListView.builder(
-        itemCount: data ==null ? 0 :data.length,
+        itemCount: subcategorias ==null ? 0 :subcategorias.length,
         itemBuilder: (BuildContext context,int index){
           return new GestureDetector(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => DetailContent(
                 id:widget.id,
-                id_subcategoria:data[index]['_id'],
+                id_subcategoria:subcategorias[index]['_id'],
                 email: widget.email,
                 name: widget.name,
-                subcategoria: data[index]['nombre'],
-                descripcion:data[index]['descripcion']
+                subcategoria: subcategorias[index]['nombre'],
+                descripcion:subcategorias[index]['descripcion']
                 ,)
               ));
             },
@@ -253,7 +262,27 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       ),
     );
   }
-}
 
+  void searchSubcategory(String query){
+    final subcategoria = data.where((subcat){
+      final tituloSubcat = subcat['titulo'].toString().toLowerCase();
+      final searchLower = query.toLowerCase();
+
+      return tituloSubcat.contains(searchLower);
+    }).toList();
+
+    setState(() {
+      this.query =query;
+      this.subcategorias = subcategoria;
+    });
+  }
+
+//
+//   Widget buildSearch()=>SearchWidget(
+//       text: query,
+//       onChanged: onChanged,
+//       hintText: 'Titulo de la subcategoria');
+//
+}
 
 

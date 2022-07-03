@@ -69,10 +69,22 @@ class MainDrawer extends StatelessWidget{
                   MaterialPageRoute(builder: (context) => HomeScreen(id:id,email :email,name: name))
               );
             },
+          ),ListTile(
+            leading: Icon(Icons.book_online_sharp),
+            title: Text('Mis categorias',
+              style: TextStyle(fontSize: 18
+              ),
+            ),
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen(id:id,email :email,name: name))
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Profile',
+            title: Text('Perfil',
               style: TextStyle(fontSize: 18
               ),
             ),
@@ -100,66 +112,66 @@ class MainDrawer extends StatelessWidget{
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => GettingStarted()), (Route<dynamic> route) => false);
             },
           ),
-          Container(
-                decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.black26))),
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Categorias',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: null,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black26))),
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Tecnologia',
-              style: TextStyle(fontSize: 18
-              ),
-
-            ),
-            onTap: null,
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Tecnica',
-              style: TextStyle(fontSize: 18
-              ),
-
-            ),
-            onTap: null,
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Criterios de evaluacion TyT',
-              style: TextStyle(fontSize: 18
-              ),
-
-            ),
-            onTap: null,
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Otros documentos de apoyo',
-              style: TextStyle(fontSize: 18
-              ),
-
-            ),
-            onTap: null,
-          ),
-          ListTile(
-            // leading: Icon(Icons.arrow_back),
-            title: Text('Preguntas frecuentes',
-              style: TextStyle(fontSize: 18
-              ),
-            ),
-            onTap: null,
-          ),
+          // Container(
+          //       decoration: BoxDecoration(
+          //           border: Border(bottom: BorderSide(color: Colors.black26))),
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Categorias',
+          //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          //   onTap: null,
+          // ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //       border: Border(bottom: BorderSide(color: Colors.black26))),
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Tecnologia',
+          //     style: TextStyle(fontSize: 18
+          //     ),
+          //
+          //   ),
+          //   onTap: null,
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Tecnica',
+          //     style: TextStyle(fontSize: 18
+          //     ),
+          //
+          //   ),
+          //   onTap: null,
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Criterios de evaluacion TyT',
+          //     style: TextStyle(fontSize: 18
+          //     ),
+          //
+          //   ),
+          //   onTap: null,
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Otros documentos de apoyo',
+          //     style: TextStyle(fontSize: 18
+          //     ),
+          //
+          //   ),
+          //   onTap: null,
+          // ),
+          // ListTile(
+          //   // leading: Icon(Icons.arrow_back),
+          //   title: Text('Preguntas frecuentes',
+          //     style: TextStyle(fontSize: 18
+          //     ),
+          //   ),
+          //   onTap: null,
+          // ),
 
 
         ],

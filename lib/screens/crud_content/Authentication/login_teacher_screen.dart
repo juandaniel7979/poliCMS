@@ -75,7 +75,6 @@ class _LoginPageState extends State<LoginPageTeacher> {
           _isLoading = false;
         });
         jsonResponse = json.decode(response.body);
-        msg= jsonResponse['message'];
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -118,12 +117,6 @@ class _LoginPageState extends State<LoginPageTeacher> {
         ),
         automaticallyImplyLeading: false,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back_ios),
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },
-        // ),
       ),
       body: Container(
         padding: const EdgeInsets.all(15),
