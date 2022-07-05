@@ -4,6 +4,7 @@ import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
 import 'package:app/screens/crud_content/detail_content.dart';
 import 'package:app/screens/crud_content/detail_content_student.dart';
+import 'package:app/screens/crud_content/list_categories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:app/screens/crud_content/edit_subcategories.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
@@ -55,6 +56,8 @@ class MyApp extends StatelessWidget {
         GettingStarted.routeName: (_) => GettingStarted(),
         HomeScreen.route: (BuildContext context) =>
             HomeScreen(id: id, email: email, name: name),
+        ListCategories.route: (BuildContext context) =>
+            ListCategories(id: id, email: email, name: name),
         HomeScreenStudent.route: (BuildContext context) =>
             HomeScreenStudent(id: id, email: email, name: name),
         DetailsScreen.route: (BuildContext context) =>

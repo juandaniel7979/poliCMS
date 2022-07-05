@@ -2,6 +2,7 @@
 import 'package:app/main.dart';
 import 'package:app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/details_screen.dart';
 import '../screens/getting_started.dart';
 
@@ -11,6 +12,7 @@ class MainDrawer extends StatelessWidget{
   final String email;
   final String name;
   final String id;
+
 
 // Receiving Email using Constructor.
   MainDrawer({required this.id,required this.email,required this.name});
@@ -107,8 +109,12 @@ class MainDrawer extends StatelessWidget{
               style: TextStyle(fontSize: 18,
               ),
             ),
-            onTap: (){
+            onTap: ()async{
               // Navigator.of(context).popAndPushNamed(GettingStarted.routeName);
+              SharedPreferences sharedPreferences;
+              sharedPreferences = await SharedPreferences.getInstance();
+              sharedPreferences.clear();
+              // sharedPreferences.commit();
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => GettingStarted()), (Route<dynamic> route) => false);
             },
           ),
