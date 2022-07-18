@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:app/Widgets/main_drawer.dart';
+import 'package:app/main.dart';
+import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_category.dart';
+import 'package:app/screens/crud_content/edit_subcategories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
@@ -11,26 +14,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // String id='';
-// String name='';
+// String nombre='';
 // String email='';
-class Explorer extends StatefulWidget {
-  static const route = '/explorer';
+class MyCategories extends StatefulWidget {
+  static const route = '/MyCategories';
 
   final String id;
   final String email;
-  final String name;
+  final String nombre;
 
-  Explorer({required this.id, required this.email, required this.name});
+  MyCategories({required this.id, required this.email, required this.nombre});
 
-  _ExplorerState createState() => _ExplorerState();
+  _MyCategoriesState createState() => _MyCategoriesState();
 }
 
-class _ExplorerState extends State<Explorer> {
-  late List data = [];
+class _MyCategoriesState extends State<MyCategories> {
+  late var data = [];
   Future<List> _getData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var url='https://poli-cms.herokuapp.com/api/categoria/categorias?id=${widget.id}';
-    // print(url);
     var token= sharedPreferences.getString("token");
     final response = await http.get(
         Uri.parse(url),
@@ -50,13 +52,27 @@ class _ExplorerState extends State<Explorer> {
     this._getData();
   }
 
+  Future _DeleteElement( id_categoria) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+    var datos= {"id":id_categoria};
+    final response = await http.put(
+        Uri.parse("http://192.168.56.1:3002/api/categoria/borrar"),
+        body:json.encode(datos),
+        headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
+    print(response.body);
+
+    // print(data[1]["nombre"]);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home page'),
+        title: Text('Mis categorias'),
       ),
-      drawer: MainDrawer(id:widget.id,email: widget.email, name: widget.name),
+      drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
       body: new ListView.builder(
         itemCount: data == null ? 0 : data.length,
         itemBuilder: (BuildContext context, int index) {
@@ -69,7 +85,7 @@ class _ExplorerState extends State<Explorer> {
                             id: widget.id,
                             id_categoria:data[index]['_id'],
                             email: widget.email,
-                            name: widget.name,
+                            nombre: widget.nombre,
                             categoria: data[index]['nombre'],
                             descripcion: data[index]['descripcion'],
                           )));
@@ -84,13 +100,50 @@ class _ExplorerState extends State<Explorer> {
                   ),
                   subtitle: Text('Descripcion: ' + data[index]['descripcion']),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton(
+                      child: const Text('EDIT'),
+                      onPressed: () {
+                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>(id: data[index]['id_subcategoria'], nombre: data[index]['nombre'], descripcion: data[index]['descripcion'])));
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      child: const Text('DELETE',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            AlertDialog(
+                              title: const Text('Eliminar'),
+                              content: const Text('Está seguro que desea eliminar este elemento?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  // onPressed: () => Navigator.pop(context, 'OK'),
+                                  onPressed: () {
+                                    _DeleteElement(data[index]['_id']);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => MyCategories(id:widget.id,email: widget.email,nombre: widget.nombre))
+                                    );
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
               ]),
-              // EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              // color: Colors.white,
-              // elevation: 5.0,
-              // child: Center(
-              //     child: Text('id: '+data[index]['id_categoria']+'\nCategoria: '+data[index]['nombre']+'\nDescripcion: '+data[index]['descripcion'])
-              // ),
             ),
           );
         },
@@ -106,38 +159,6 @@ class _ExplorerState extends State<Explorer> {
               child: Icon(Icons.copy),
               label: 'Copiar'),
           SpeedDialChild(
-              onTap: () async{
-               // await LaunchApp.openApp(
-               //      androidPackageName: 'com.google.android.apps.docs',
-               //      // iosUrlScheme: 'pulsesecure://',
-               //      openStore: true,
-               //      // appStoreLink:
-               //      // 'itms-apps://https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing',
-               //      // openStore: false
-               //  );
-                await openBrowseURL( url: 'https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing');
-               //  String dt = "drive";
-               //  bool isInstalled = await DeviceApps.isAppInstalled('com.google.android.gms.drive');
-               //  if (isInstalled != false)
-               //  {
-               //    AndroidIntent intent = AndroidIntent(
-               //        action: 'action_view',
-               //        data: dt
-               //    );
-               //    await intent.launch();
-               //  }
-               //  else
-               //  {
-               //    String url = dt;
-               //    if (await canLaunchUrl(Uri.parse(url)))
-               //      await launch(url);
-               //    else
-               //      throw 'Could not launch $url';
-               //  }
-              },
-              child: Icon(Icons.drive_eta_outlined),
-              label: 'Copiar'),
-          SpeedDialChild(
               onTap: () {},
               child: Icon(Icons.upload),
               label: 'Subir contenido'),
@@ -146,7 +167,7 @@ class _ExplorerState extends State<Explorer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddCategory(id: widget.id,name: widget.name,email: widget.email)));
+                        builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
               },
               child: Icon(Icons.add),
               label: 'Add category')

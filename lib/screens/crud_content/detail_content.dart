@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 // String id='';
-// String name='';
+// String nombre='';
 // String email='';
 
 
@@ -34,11 +34,12 @@ class DetailContent extends StatefulWidget{
   final String id;
   final String id_subcategoria;
   final String email;
-  final String name;
+  final String nombre;
   final String subcategoria;
   final String descripcion;
+  final String url;
 
-  DetailContent({required this.id,required this.id_subcategoria, required this.email,required this.name,required this.subcategoria,required this.descripcion});
+  DetailContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
 
 
   _DetailContentState createState() => _DetailContentState();
@@ -71,18 +72,21 @@ class _DetailContentState extends State<DetailContent> {
       );
       var res = jsonDecode(response.body);
       // print(response.body);
-      final line = response.body.toString();
+      print(widget.descripcion);
+      // final line = response.body.toString();
+      final line = widget.descripcion;
       final regex = RegExp(r'ion":[^]*]');
       final match = regex.firstMatch(line);
       final everything = match?.group(0);
       print(everything);
-      var extraccion = everything.toString().replaceAll('ion":"',"").replaceAll('\\"','"').replaceAll("\\\\n", '\\n').replaceAll(',"estado":0,"__v":0}]', '').replaceAll('","descripcion_2":[]', '');
+      final extraccion = everything.toString().replaceAll('ion":"',"").replaceAll('\\"','"').replaceAll("\\\\n", '\\n').replaceAll(',"estado":0,"__v":0}]', '').replaceAll('","descripcion_2":[]', '').replaceAll(']"', ']');
       print('#\n');
       print(extraccion);
       try{
         print('entro aqui');
         // final doc = quill.Document.fromJson(jsonDecode(result));
-        final doc = quill.Document.fromJson(jsonDecode(extraccion));
+        // final doc = quill.Document.fromJson(jsonDecode(extraccion));
+        final doc = quill.Document.fromJson(jsonDecode(widget.descripcion));
         this.setState(() {
           _controller = quill.QuillController(
               document: doc, selection: const TextSelection.collapsed(offset: 0));
@@ -111,7 +115,7 @@ class _DetailContentState extends State<DetailContent> {
       appBar: AppBar(
         title: Text(widget.subcategoria),
       ),
-      drawer: MainDrawer(id:widget.id,email:widget.email,name: widget.name),
+      drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
       body:Column(
         children: [
 
@@ -183,39 +187,6 @@ class _DetailContentState extends State<DetailContent> {
 
         ],
       ),
-      // Column(
-      //     children: [
-      //       Expanded(
-      //           child:Padding(
-      //             padding: const EdgeInsets.all(7.0),
-      //             child: Container(
-      //                 decoration: BoxDecoration(
-      //                     borderRadius: BorderRadius.circular(5),
-      //                     boxShadow: [
-      //                       // BoxShadow(
-      //                       //   color: Colors.lightBlueAccent,
-      //                       //   offset:const Offset(5.0, 5.0),
-      //                       //   blurRadius:10.0,
-      //                       //   spreadRadius:2.0
-      //                       // ),
-      //                       BoxShadow(
-      //                         color: Colors.white,
-      //                         offset:const Offset(-5.5, 0.0,),
-      //                         blurRadius:0.0,
-      //                         spreadRadius:0.0,
-      //                       ),
-      //                     ]
-      //                 ),
-      //                 child:Text(descripcion[]['descripcion'])
-      //               // quill.QuillEditor.basic(controller: _controller = quill.QuillController(document: quill.Document.fromJson(jsonDecode(jsonEncode(descripcion))), selection: TextSelection.collapsed(offset: 0)), readOnly: false),
-      //             ),
-      //           )
-      //       ),
-      //     ]
-      // ),
-
-
-
       floatingActionButton: SpeedDial(
         backgroundColor: Colors.green,
         animatedIcon: AnimatedIcons.menu_close,
@@ -231,7 +202,7 @@ class _DetailContentState extends State<DetailContent> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria)));
+                    MaterialPageRoute(builder: (context) =>  AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,url: widget.url,)));
               },
               child: Icon(Icons.upload),
               label: 'Añadir contenido'
@@ -241,6 +212,10 @@ class _DetailContentState extends State<DetailContent> {
       ),
     );
   }
+
+
+
+
 }
 
 

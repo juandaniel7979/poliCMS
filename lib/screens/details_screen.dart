@@ -8,10 +8,10 @@ static const route = '/details-screen';
 
   // final String nombre;
     final String email;
-    final String name;
+    final String nombre;
 
   // Receiving Email using Constructor.
-DetailsScreen({required this.email,required this.name});
+DetailsScreen({required this.email,required this.nombre});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ DetailsScreen({required this.email,required this.name});
       appBar: AppBar(
         title: Text('Details page'),
       ),
-      // drawer: MainDrawer(id:widget.id,email: email,name: name),
+      // drawer: MainDrawer(id:widget.id,email: email,nombre: nombre),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

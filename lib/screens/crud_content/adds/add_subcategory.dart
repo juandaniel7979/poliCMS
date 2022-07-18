@@ -21,11 +21,11 @@ class AddSubcategory extends StatefulWidget{
   final String id;
   final String id_categoria;
   final String email;
-  final String name;
+  final String nombre;
   final String categoria;
   final String descripcion;
   // AddSubcategory({required this.id});
-  AddSubcategory({required this.id,required this.id_categoria,required this.email,required this.name,required this.categoria,required this.descripcion});
+  AddSubcategory({required this.id,required this.id_categoria,required this.email,required this.nombre,required this.categoria,required this.descripcion});
   _AddSubCategoryState createState() => _AddSubCategoryState();
 
 }
@@ -39,114 +39,36 @@ class _AddSubCategoryState extends State<AddSubcategory> {
   final DescriptionController = TextEditingController();
 
   String msg = '';
-  // String url = "http://192.168.56.1/tienda/login.php";
-
-  // Future _AddSubCategory() async {
-  //
-  //   setState(() {
-  //     visible = true ;
-  //   });
-  //
-  //   String title = TitleController.text;
-  //   String Description = DescriptionController.text;
-  //
-  //   var data = {'nombre':title,'descripcion': Description,'id_categoria_fk':widget.id};
-  //
-  //
-  //   final response = await http.post(
-  //       Uri.http("192.168.56.1", "/PPI_ANDROID/crud/adds/add_subcategory.php"), body:json.encode(data));
-  //
-  //   var msg = json.decode(response.body);
-  //
-  //   if(msg=="Se ha agregado la categoria exitosamente"){
-  //     // Hiding the CircularProgressIndicator.
-  //     setState(() {
-  //       visible = false;
-  //     });
-  //     // Navigate to Profile Screen & Sending Email to Next Screen.
-  //     // Navigator.pushReplacementNamed(context,LoginScreenStudent.routeName);
-  //     // Navigator.push(
-  //     //     context,
-  //     //     MaterialPageRoute(builder: (context) => LoginPageStudent())
-  //     // );
-  //
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: new Text(msg),
-  //           actions: <Widget>[
-  //             ElevatedButton(
-  //               child: new Text("OK"),
-  //               onPressed: () {
-  //                 // Navigator.pop(context);
-  //                 // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
-  //                 Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,email: widget.email,name: widget.name,categoria: widget.categoria,descripcion:widget.descripcion))
-  //                 );
-  //                 // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //
-  //   }else{
-  //
-  //     // If Email or Password did not Matched.
-  //     // Hiding the CircularProgressIndicator.
-  //     setState(() {
-  //       visible = false;
-  //     });
-  //         showDialog(
-  //           context: context,
-  //           builder: (BuildContext context) {
-  //             return AlertDialog(
-  //               title: new Text("La categoria que intentas insertar ya existe"  ),
-  //               actions: <Widget>[
-  //                 ElevatedButton(
-  //                   child: new Text("OK"),
-  //                   onPressed: () => Navigator.pop(context, 'OK'),
-  //                 ),
-  //               ],
-  //             );
-  //           },
-  //         );
-  //
-  //
-  //
-  //     // Showing Alert Dialog with Response JSON Message.
-  //
-  //   }
-  // }
-
-  Future _AddSubCategory() async {
+  Future _AddSubcategory() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonResponse = null;
     var url ="https://poli-cms.herokuapp.com/api/subcategoria/subcategoria";
-    String title = TitleController.text;
+    // var url ="https://localhost:3002/api/subcategoria/subcategoria";
+    String nombre = TitleController.text;
     String Description = DescriptionController.text;
     var token= sharedPreferences.getString("token");
     var response = await http.post(Uri.parse(url),
-        body:jsonEncode({'nombre':title,'descripcion': Description,'id_categoria':widget.id}),
+        body:jsonEncode({'nombre':nombre,'descripcion': Description,'id_categoria':widget.id_categoria}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'}
     );
+
+
+    print(response.statusCode);
+    print(response.body);
     if(response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(msg),
+            title: new Text("Se ha creado la categoria con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,name: widget.name,categoria: widget.categoria,descripcion:widget.descripcion))
+                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
                   );
                   // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
                 },
@@ -158,12 +80,12 @@ class _AddSubCategoryState extends State<AddSubcategory> {
     }
     else {
       jsonResponse = json.decode(response.body);
-      msg= jsonResponse['message'];
+      msg="Esta categoria ya existe";
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(jsonResponse['message']),
+            title: new Text(msg),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -255,8 +177,8 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                           if (valor!.isEmpty) {
                             return 'El campo descripcion es obligatorio';
                           }
-                          if (valor.length<15 || valor.length>150) {
-                            return 'El campo descripcion debe contener minimo 15 y máximo 200 caracteres';
+                          if (valor.length<20 || valor.length>150) {
+                            return 'El campo descripcion debe contener minimo 20 y máximo 200 caracteres';
                           }
 
                         },
@@ -303,7 +225,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                         onPressed: () {
                           if(_keyForm.currentState!.validate()){
                             print("validacion exitosa");
-                            _AddSubCategory();
+                            _AddSubcategory();
                           }else{
                             print("validacion erronea");
                           }

@@ -11,16 +11,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // String id='';
-// String name='';
+// String nombre='';
 // String email='';
 class HomeScreen extends StatefulWidget {
   static const route = '/HomeScreen-teacher';
 
   final String id;
   final String email;
-  final String name;
+  final String nombre;
 
-  HomeScreen({required this.id, required this.email, required this.name});
+  HomeScreen({required this.id, required this.email, required this.nombre});
 
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Home page'),
       ),
-      drawer: MainDrawer(id:widget.id,email: widget.email, name: widget.name),
+      drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
       body: new ListView.builder(
         itemCount: data == null ? 0 : data.length,
         itemBuilder: (BuildContext context, int index) {
@@ -68,8 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context) => ListSubcategories(
                             id: widget.id,
                             id_categoria:data[index]['_id'],
+
                             email: widget.email,
-                            name: widget.name,
+                            nombre: widget.nombre,
                             categoria: data[index]['nombre'],
                             descripcion: data[index]['descripcion'],
                           )));
@@ -146,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddCategory(id: widget.id,name: widget.name,email: widget.email)));
+                        builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
               },
               child: Icon(Icons.add),
               label: 'Add category')

@@ -1,6 +1,8 @@
 
 import 'package:app/main.dart';
+import 'package:app/screens/explore.dart';
 import 'package:app/screens/home_screen.dart';
+import 'package:app/screens/my_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/details_screen.dart';
@@ -10,12 +12,12 @@ import '../screens/getting_started.dart';
 class MainDrawer extends StatelessWidget{
 
   final String email;
-  final String name;
+  final String nombre;
   final String id;
 
 
 // Receiving Email using Constructor.
-  MainDrawer({required this.id,required this.email,required this.name});
+  MainDrawer({required this.id,required this.email,required this.nombre});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class MainDrawer extends StatelessWidget{
                       ),
                     ),
                   ),
-                  Text(name,
+                  Text(nombre,
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.white,
@@ -68,7 +70,20 @@ class MainDrawer extends StatelessWidget{
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen(id:id,email :email,name: name))
+                  MaterialPageRoute(builder: (context) => HomeScreen(id:id,email :email,nombre: nombre))
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.search),
+            title: Text('Explorar',
+              style: TextStyle(fontSize: 18
+              ),
+            ),
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Explorer(id:id,email :email,nombre: nombre))
               );
             },
           ),ListTile(
@@ -80,7 +95,7 @@ class MainDrawer extends StatelessWidget{
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen(id:id,email :email,name: name))
+                  MaterialPageRoute(builder: (context) => MyCategories(id:id,email :email,nombre: nombre))
               );
             },
           ),

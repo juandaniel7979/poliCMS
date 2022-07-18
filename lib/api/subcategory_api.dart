@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SubcategoryApi{
-  static Future<List<Subcategory>> getSubcategory(String query) async{
+  static Future<List<Subcategory>> getSubcategory(String query,id) async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token= sharedPreferences.getString("token");
-    final url = Uri.parse('https://poli-cms.herokuapp.com/api/subcategoria/subcategoria');
+    final url = Uri.parse('https://poli-cms.herokuapp.com/api/subcategoria/subcategorias?id=${id}');
     final response = await http.get(url,
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
 

@@ -21,11 +21,11 @@ class AddSubcategory extends StatefulWidget{
   final String id;
   final String id_categoria;
   final String email;
-  final String name;
+  final String nombre;
   final String categoria;
   final String descripcion;
   // AddSubcategory({required this.id});
-  AddSubcategory({required this.id,required this.id_categoria,required this.email,required this.name,required this.categoria,required this.descripcion});
+  AddSubcategory({required this.id,required this.id_categoria,required this.email,required this.nombre,required this.categoria,required this.descripcion});
   _AddSubCategoryState createState() => _AddSubCategoryState();
 
 }
@@ -83,7 +83,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
   //                 // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
   //                 Navigator.push(
   //                     context,
-  //                     MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,email: widget.email,name: widget.name,categoria: widget.categoria,descripcion:widget.descripcion))
+  //                     MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
   //                 );
   //                 // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
   //               },
@@ -146,7 +146,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,name: widget.name,categoria: widget.categoria,descripcion:widget.descripcion))
+                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
                   );
                   // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
                 },

@@ -11,10 +11,10 @@ class AccessCode extends StatelessWidget{
 
   final String id;
   final String email;
-  final String name;
+  final String nombre;
 
 // Receiving Email using Constructor.
-  AccessCode({required this.id,required this.email,required this.name});
+  AccessCode({required this.id,required this.email,required this.nombre});
 
   static const routeName = '/access-code';
   @override

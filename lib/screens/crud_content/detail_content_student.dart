@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 // String id='';
-// String name='';
+// String nombre='';
 // String email='';
 
 
@@ -24,11 +24,11 @@ class DetailContentStudent extends StatefulWidget{
 
   final String id;
   final String email;
-  final String name;
+  final String nombre;
   final String categoria;
   final String descripcion;
 
-  DetailContentStudent({required this.id,required this.email,required this.name,required this.categoria,required this.descripcion});
+  DetailContentStudent({required this.id,required this.email,required this.nombre,required this.categoria,required this.descripcion});
 
   _DetailContentStudentState createState() => _DetailContentStudentState();
 }
@@ -62,13 +62,13 @@ class _DetailContentStudentState extends State<DetailContentStudent> {
       appBar: AppBar(
         title: Text(widget.categoria),
       ),
-      drawer: MainDrawer(id:widget.id,email:widget.email,name: widget.name),
+      drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
       body:new ListView.builder(
         itemCount: data ==null ? 0 :data.length,
         itemBuilder: (BuildContext context,int index){
           return new GestureDetector(
             onTap: (){
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailContent(id: data[index]['id_subcategoria'],email: widget.email,name: widget.name,categoria: data[index]['nombre'],descripcion:data[index]['descripcion'] ,)));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailContent(id: data[index]['id_subcategoria'],email: widget.email,nombre: widget.nombre,categoria: data[index]['nombre'],descripcion:data[index]['descripcion'] ,)));
             },
             child: Card(
               child:Column(

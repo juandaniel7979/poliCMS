@@ -18,11 +18,11 @@ class HomeScreenStudent extends StatefulWidget {
   // final String nombre;
   final String id;
   final String email;
-  final String name;
+  final String nombre;
 
 // Receiving Email using Constructor.
   HomeScreenStudent(
-      {required this.id, required this.email, required this.name});
+      {required this.id, required this.email, required this.nombre});
 
   // HomeScreen({this.username});
   // final String username;
@@ -61,13 +61,13 @@ class HomeScreenStudent extends StatefulWidget {
   appBar: AppBar(
   title: Text('Home page'),
   ),
-  drawer: MainDrawer(id:widget.id,email:widget.email,name: widget.name),
+  drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
   body: new ListView.builder(
   itemCount: data ==null ? 0 :data.length,
   itemBuilder: (BuildContext context,int index){
   return new GestureDetector(
   onTap: (){
-  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailContentStudent(id: data[index]['id_categoria'],email: widget.email,name: widget.name,categoria: data[index]['nombre'],descripcion:data[index]['descripcion'] ,)));
+  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailContentStudent(id: data[index]['id_categoria'],email: widget.email,nombre: widget.nombre,categoria: data[index]['nombre'],descripcion:data[index]['descripcion'] ,)));
   },
   child: Card(
   child:Column(

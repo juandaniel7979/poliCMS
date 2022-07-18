@@ -18,9 +18,9 @@ class AddCategoryPage extends StatelessWidget {
 class AddCategory extends StatefulWidget{
   static const routeName = '/addCategory';
   final String id;
-  final String name;
+  final String nombre;
   final String email;
-  AddCategory({required this.id,required this.name,required this.email});
+  AddCategory({required this.id,required this.nombre,required this.email});
   _AddCategoryState createState() => _AddCategoryState();
 
 }
@@ -51,14 +51,14 @@ class _AddCategoryState extends State<AddCategory> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(msg),
+            title: new Text("Se ha creado la categoria con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen(id:widget.id,email: widget.email,name: widget.name))
+                      MaterialPageRoute(builder: (context) => HomeScreen(id:widget.id,email: widget.email,nombre: widget.nombre))
                   );
                   // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
                 },

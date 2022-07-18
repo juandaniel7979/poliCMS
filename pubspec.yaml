@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^1.18.0
   firebase_auth: ^3.3.20
   external_app_launcher: ^3.0.0
+  introduction_screen: ^3.0.2
   flutter:
     sdk: flutter
 
@@ -47,6 +48,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   url_launcher: ^6.1.4
+  flutter_conditional_rendering: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -75,7 +77,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+     - assets/
+     - assets/images/
      - assets/images/enroll.png
+#     - assets/images/ebook.png
+#     - assets/images/learn.png
+#     - assets/images/manthumbs.png
+#     - assets/images/readingbook.png
      - assets/images/login.png
      - assets/file.json
 

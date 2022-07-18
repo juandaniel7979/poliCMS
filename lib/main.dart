@@ -8,7 +8,10 @@ import 'package:app/screens/crud_content/list_categories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:app/screens/crud_content/edit_subcategories.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
+import 'package:app/screens/explore.dart';
 import 'package:app/screens/home_screen_student.dart';
+import 'package:app/screens/my_categories.dart';
+import 'package:app/screens/onboarding_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +36,11 @@ String id = '';
 String id_subcategoria = '';
 String id_categoria = '';
 String email = '';
-String name = '';
+String nombre = '';
 String categoria = '';
 String subcategoria ='';
 String descripcion = '';
+String url = '';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -50,64 +54,81 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
-      home: GettingStarted(),
-      // home: MainPage(),
+      // home: GettingStarted(),
+      home: OnBoardingPage(),
       routes: {
         GettingStarted.routeName: (_) => GettingStarted(),
         HomeScreen.route: (BuildContext context) =>
-            HomeScreen(id: id, email: email, name: name),
-        ListCategories.route: (BuildContext context) =>
-            ListCategories(id: id, email: email, name: name),
+            HomeScreen(id: id, email: email, nombre: nombre),
+        Explorer.route: (BuildContext context) =>
+            Explorer(id: id, email: email, nombre: nombre),
+        MyCategories.route: (BuildContext context) =>
+            MyCategories(id: id, email: email, nombre: nombre),
         HomeScreenStudent.route: (BuildContext context) =>
-            HomeScreenStudent(id: id, email: email, name: name),
+            HomeScreenStudent(id: id, email: email, nombre: nombre),
         DetailsScreen.route: (BuildContext context) =>
-            DetailsScreen(email: email, name: name),
+            DetailsScreen(email: email, nombre: nombre),
         LoginScreenStudent.routeName: (_) => LoginPageStudent(),
         LoginScreenTeacher.routeName: (_) => LoginPageTeacher(),
         SignupScreenStudent.routeName: (_) => SignupPageStudent(),
         SignupScreenTeacher.routeName: (_) => SignupPageTeacher(),
-        AccessCode.routeName: (BuildContext context) =>AccessCode(id: id, email: email, name: name),
-        AddCategory.routeName: (BuildContext context) => AddCategory(id: id,email: email, name: name),
+        AccessCode.routeName: (BuildContext context) =>AccessCode(id: id, email: email, nombre: nombre),
+        AddCategory.routeName: (BuildContext context) => AddCategory(id: id,email: email, nombre: nombre),
         AddSubcategory.routeName: (BuildContext context) => AddSubcategory(
             id: id,
             id_categoria: id_categoria,
-            name: name,
+            nombre: nombre,
             email: email,
             categoria: categoria,
             descripcion: descripcion),
         ListSubcategories.route: (BuildContext context) => ListSubcategories(
             id: id,
             id_categoria: id_categoria,
-            name: name,
+            nombre: nombre,
             email: email,
             categoria: categoria,
-            descripcion: descripcion),
+            descripcion: descripcion
+        ),
         DetailContentStudent.route: (BuildContext context) =>DetailContentStudent(
                 id: id,
-                name: name,
+                nombre: nombre,
                 email: email,
                 categoria: categoria,
                 descripcion: descripcion),
         EditSubcategory.routeName: (BuildContext context) => EditSubcategory(
-                id: id, nombre: categoria, descripcion: descripcion),
-        ListContent.route:(BuildContext context)=> DetailContent(
+            id: id,
+            id_categoria: id_categoria,
+            id_subcategoria: id_subcategoria,
+            nombre: nombre,
+            email: email,
+            categoria: categoria,
+            descripcion: descripcion
+        ),
+        ListContent.route:(BuildContext context)=> ListContent(
                 id: id,
                 id_subcategoria:id_subcategoria,
-                name: name,
+                nombre: nombre,
                 email: email,
                 subcategoria: subcategoria,
-                descripcion: descripcion
+                descripcion: descripcion,
+                url:url
         ),DetailContent.route:(BuildContext context)=> DetailContent(
                 id: id,
                 id_subcategoria:id_subcategoria,
-                name: name,
+                nombre: nombre,
                 email: email,
                 subcategoria: subcategoria,
-                descripcion: descripcion
+                descripcion: descripcion,
+                url:url
         ),
         AddContent.routeName:(BuildContext context)=> AddContent(
             id: id,
-            id_subcategoria: id_subcategoria,
+            id_subcategoria:id_subcategoria,
+            nombre: nombre,
+            email: email,
+            subcategoria: subcategoria,
+            descripcion: descripcion,
+            url:url
         ),
       },
     );
@@ -145,7 +166,7 @@ class _MainPageState extends State<MainPage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-          return HomeScreen(id: id, email: email, name: name);
+          return HomeScreen(id: id, email: email, nombre: nombre);
           }else{
             return GettingStarted();
           }
