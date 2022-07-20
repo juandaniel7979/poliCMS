@@ -4,6 +4,7 @@ import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/Widgets/search_widget.dart';
 import 'package:app/api/category_api.dart';
 import 'package:app/model/category.dart';
+import 'package:app/screens/access_code.dart';
 import 'package:app/screens/crud_content/adds/add_category.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:flutter/material.dart';
@@ -92,13 +93,21 @@ class _ExplorerState extends State<Explorer> {
                   child: Card(
                     child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                       ListTile(
-                        leading: Icon(Icons.album),
+                        leading: Icon(Icons.book),
                         title: Text(
                           'Categoria: ' + categories[index].nombre,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text('Descripcion: ' + categories[index].descripcion),
                       ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text('Creado por:',
+                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
+                        Text(categories[index].nombre_profesor,style: TextStyle(color: Colors.grey),)
+                      ]
+                  ),
                     ]),
                     // EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                     // color: Colors.white,
@@ -113,37 +122,15 @@ class _ExplorerState extends State<Explorer> {
           ),
         ],
       ),
-      floatingActionButton: SpeedDial(
-        backgroundColor: Colors.green,
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-              onTap: () {
-                openDialog();
-              },
-              child: Icon(Icons.copy),
-              label: 'Copiar'),
-          SpeedDialChild(
-              onTap: () async{
-                await openBrowseURL( url: 'https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing');
-              },
-              child: Icon(Icons.drive_eta_outlined),
-              label: 'Copiar'),
-          SpeedDialChild(
-              onTap: () {},
-              child: Icon(Icons.upload),
-              label: 'Subir contenido'),
-          SpeedDialChild(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
-              },
-              child: Icon(Icons.add),
-              label: 'Add category')
-        ],
-      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
+        },
+        child: Icon(Icons.add),
+      )
     );
   }
 

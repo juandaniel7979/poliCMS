@@ -66,7 +66,7 @@ class _AddContentState extends State<AddContent> {
         context: context,
         builder: (context)=>AlertDialog(
           title: Text('Agregar repositorio de drive'),
-          content: Text(res['mensaje']),
+          content: Text(res['message']),
           actions: [
             TextButton(
                 onPressed: (){
@@ -102,6 +102,20 @@ class _AddContentState extends State<AddContent> {
       //   ],
       // );
     }else{
+      return showDialog(
+        context: context,
+        builder: (context)=>AlertDialog(
+          title: Text('Agregar repositorio de drive'),
+          content: Text(res['message']),
+          actions: [
+            TextButton(
+                onPressed: (){
+
+                },
+                child:Text('SUBMIT'))
+          ],
+        ),
+      );
       // return AlertDialog(
       //   title: Text('La categoria que intenta agregar ya existe'),
       //   content: Text(res['message']),
@@ -139,7 +153,7 @@ class _AddContentState extends State<AddContent> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(18),
@@ -201,7 +215,7 @@ class _AddContentState extends State<AddContent> {
             ),
             Expanded(
                 child:Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
               child: Container(
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
                   boxShadow: [

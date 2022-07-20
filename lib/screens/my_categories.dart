@@ -3,7 +3,7 @@ import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/main.dart';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_category.dart';
-import 'package:app/screens/crud_content/edit_subcategories.dart';
+import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
@@ -148,31 +148,15 @@ class _MyCategoriesState extends State<MyCategories> {
           );
         },
       ),
-      floatingActionButton: SpeedDial(
-        backgroundColor: Colors.green,
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-              onTap: () {
-                openDialog();
-              },
-              child: Icon(Icons.copy),
-              label: 'Copiar'),
-          SpeedDialChild(
-              onTap: () {},
-              child: Icon(Icons.upload),
-              label: 'Subir contenido'),
-          SpeedDialChild(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
-              },
-              child: Icon(Icons.add),
-              label: 'Add category')
-        ],
-      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
+        },
+        child: Icon(Icons.add),
+      )
     );
   }
 

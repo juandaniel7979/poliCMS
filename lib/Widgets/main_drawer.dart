@@ -63,7 +63,7 @@ class MainDrawer extends StatelessWidget{
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Home',
+            title: Text('Inicio',
               style: TextStyle(fontSize: 18
               ),
             ),
@@ -87,7 +87,7 @@ class MainDrawer extends StatelessWidget{
               );
             },
           ),ListTile(
-            leading: Icon(Icons.book_online_sharp),
+            leading: Icon(Icons.all_inbox_sharp),
             title: Text('Mis categorias',
               style: TextStyle(fontSize: 18
               ),
@@ -108,19 +108,8 @@ class MainDrawer extends StatelessWidget{
             onTap: null,
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings',
-              style: TextStyle(fontSize: 18
-              ),
-            ),
-            onTap: (){
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(DetailsScreen.route);
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.arrow_back),
-            title: Text('logout',
+            title: Text('Cerrar Sesion',
               style: TextStyle(fontSize: 18,
               ),
             ),

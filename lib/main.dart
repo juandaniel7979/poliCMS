@@ -4,9 +4,8 @@ import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
 import 'package:app/screens/crud_content/detail_content.dart';
 import 'package:app/screens/crud_content/detail_content_student.dart';
-import 'package:app/screens/crud_content/list_categories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
-import 'package:app/screens/crud_content/edit_subcategories.dart';
+import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
 import 'package:app/screens/explore.dart';
 import 'package:app/screens/home_screen_student.dart';
@@ -34,6 +33,7 @@ Future main() async {
 String token = '';
 String id = '';
 String id_subcategoria = '';
+String id_content = '';
 String id_categoria = '';
 String email = '';
 String nombre = '';
@@ -115,6 +115,7 @@ class MyApp extends StatelessWidget {
         ),DetailContent.route:(BuildContext context)=> DetailContent(
                 id: id,
                 id_subcategoria:id_subcategoria,
+                id_content: id_content,
                 nombre: nombre,
                 email: email,
                 subcategoria: subcategoria,

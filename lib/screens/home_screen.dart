@@ -26,133 +26,75 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late List data = [];
-  Future<List> _getData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var url='https://poli-cms.herokuapp.com/api/categoria/categorias?id=${widget.id}';
-    // print(url);
-    var token= sharedPreferences.getString("token");
-    final response = await http.get(
-        Uri.parse(url),
-        headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'}
-    );
-    var res = jsonDecode(response.body);
-    this.setState(() {
-      data = res['categoria'];
-    });
 
-    return res['categoria'];
-  }
 
   @override
   void initState() {
     super.initState();
-    this._getData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Home page'),
+        title: Text('Inicio'),
       ),
       drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
-      body: new ListView.builder(
-        itemCount: data == null ? 0 : data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return new GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListSubcategories(
-                            id: widget.id,
-                            id_categoria:data[index]['_id'],
-
-                            email: widget.email,
-                            nombre: widget.nombre,
-                            categoria: data[index]['nombre'],
-                            descripcion: data[index]['descripcion'],
-                          )));
-            },
-            child: Card(
-              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.album),
-                  title: Text(
-                    'Categoria: ' + data[index]['nombre'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Descripcion: ' + data[index]['descripcion']),
-                ),
-              ]),
-              // EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              // color: Colors.white,
-              // elevation: 5.0,
-              // child: Center(
-              //     child: Text('id: '+data[index]['id_categoria']+'\nCategoria: '+data[index]['nombre']+'\nDescripcion: '+data[index]['descripcion'])
-              // ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Image.asset(
+              "assets/images/searching.png",
+              // "assets/images/enroll.png",
+              // height: 180,
             ),
-          );
-        },
+            // SizedBox(
+            //   height: 45,
+            // ),
+            Center(
+              child: Text('Empieza a explorar',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22,),
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Center(
+              child: OutlinedButton(
+                child: Text(
+                  'Explorar',
+                  style: TextStyle(
+                      fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
+                  ),
+                ),
+                style:
+                OutlinedButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(horizontal: 40,vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    )
+                ),
+                onPressed: () {
+
+                }
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            
+          ],
+        ),
+
+
       ),
-      floatingActionButton: SpeedDial(
-        backgroundColor: Colors.green,
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-              onTap: () {
-                openDialog();
-              },
-              child: Icon(Icons.copy),
-              label: 'Copiar'),
-          SpeedDialChild(
-              onTap: () async{
-               // await LaunchApp.openApp(
-               //      androidPackageName: 'com.google.android.apps.docs',
-               //      // iosUrlScheme: 'pulsesecure://',
-               //      openStore: true,
-               //      // appStoreLink:
-               //      // 'itms-apps://https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing',
-               //      // openStore: false
-               //  );
-                await openBrowseURL( url: 'https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing');
-               //  String dt = "drive";
-               //  bool isInstalled = await DeviceApps.isAppInstalled('com.google.android.gms.drive');
-               //  if (isInstalled != false)
-               //  {
-               //    AndroidIntent intent = AndroidIntent(
-               //        action: 'action_view',
-               //        data: dt
-               //    );
-               //    await intent.launch();
-               //  }
-               //  else
-               //  {
-               //    String url = dt;
-               //    if (await canLaunchUrl(Uri.parse(url)))
-               //      await launch(url);
-               //    else
-               //      throw 'Could not launch $url';
-               //  }
-              },
-              child: Icon(Icons.drive_eta_outlined),
-              label: 'Copiar'),
-          SpeedDialChild(
-              onTap: () {},
-              child: Icon(Icons.upload),
-              label: 'Subir contenido'),
-          SpeedDialChild(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddCategory(id: widget.id,nombre: widget.nombre,email: widget.email)));
-              },
-              child: Icon(Icons.add),
-              label: 'Add category')
-        ],
-      ),
+
     );
   }
 

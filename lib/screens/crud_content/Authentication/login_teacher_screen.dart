@@ -54,8 +54,6 @@ class _LoginPageState extends State<LoginPageTeacher> {
     var url ="https://poli-cms.herokuapp.com/api/user/login-profesor";
 
 
-    try{
-      // await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo.trim(), password: contrasena.trim());
       var response = await http.post(Uri.parse(url), body: {'correo': correo.trim(), 'contrasena' : contrasena});
       if(response.statusCode == 200) {
         jsonResponse = json.decode(response.body);
@@ -64,6 +62,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
             _isLoading = false;
           });
           sharedPreferences.setString("token", jsonResponse['data']['token']);
+          sharedPreferences.setString("rol", "profesor");
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],nombre: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
         }
       }
@@ -89,11 +88,6 @@ class _LoginPageState extends State<LoginPageTeacher> {
           },
         );
       }
-
-    }on FirebaseAuthException catch(e){
-      print(e);
-    }
-
 
   }
 

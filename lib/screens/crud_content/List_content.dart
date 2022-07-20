@@ -130,6 +130,7 @@ class _ListContentState extends State<ListContent> {
                               (context) => DetailContent(
                             id:contents[index].id,
                             id_subcategoria:contents[index].id_subcategoria,
+                            id_content:contents[index].id,
                             email: widget.email,
                             nombre: widget.nombre,
                             subcategoria: contents[index].nombre,

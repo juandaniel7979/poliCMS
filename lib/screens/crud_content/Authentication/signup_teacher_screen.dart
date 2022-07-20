@@ -1,7 +1,6 @@
 import 'package:app/screens/crud_content/Authentication/login_student_screen.dart';
 import 'package:app/screens/crud_content/Authentication/login_teacher_screen.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -27,7 +26,6 @@ class SignupPageTeacher extends StatefulWidget{
 class _SignupPageState extends State<SignupPageTeacher> {
 
   final _keyForm = GlobalKey<FormState>();
-  final auth = FirebaseAuth.instance;
 
   bool visible = false;
   final uidController = TextEditingController();
@@ -56,35 +54,13 @@ class _SignupPageState extends State<SignupPageTeacher> {
       var jsonResponse = null;
       var url ="https://poli-cms.herokuapp.com/api/user/register-profesor";
 
-
-      showDialog(context: context,barrierDismissible: false, builder: (context)=>Center(child: CircularProgressIndicator()));
-      var response = await http.post(Uri.parse(url), body: {'uid':uid,'nombre':nombre,'nombre_2':nombre2,'apellido':apellido,'apellido_2':apellido2,'correo': correo, 'contrasena' : contrasena});
+      var response = await http.post(Uri.parse(url), body: {'uid':uid,'nombre':nombre,'nombre_2':nombre2,'apellido':apellido,'apellido_2':apellido2,'correo': correo.toLowerCase().trim(), 'contrasena' : contrasena});
       if(response.statusCode == 200) {
-        try{
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correo.trim(), password: contrasena);
-        }on FirebaseAuthException catch(e){
-          print(e);
-          // showDialog(
-          //   context: context,
-          //   builder: (BuildContext context) {
-          //     return AlertDialog(
-          //       title: new Text('Ha fallado el registro'),
-          //       actions: <Widget>[
-          //         ElevatedButton(
-          //           child: new Text("OK"),
-          //           onPressed: () {
-          //             Navigator.pop(context);
-          //           },
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // );
-        }
         jsonResponse = json.decode(response.body);
+        print("Token "+jsonResponse['token']);
         if(jsonResponse != null) {
-          sharedPreferences.setString("token", jsonResponse['data']['token']);
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreenTeacher()), (Route<dynamic> route) => false);
+          sharedPreferences.setString("token", jsonResponse['token']);
+          Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
         }
       }
       else {
@@ -119,7 +95,7 @@ class _SignupPageState extends State<SignupPageTeacher> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, LoginScreenTeacher.routeName );
+            Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
           },
         ),
       ),
@@ -341,7 +317,7 @@ class _SignupPageState extends State<SignupPageTeacher> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: 'Password',
+                          hintText: 'Contrasena',
                           contentPadding: const EdgeInsets.all(15),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
@@ -356,26 +332,26 @@ class _SignupPageState extends State<SignupPageTeacher> {
                       SizedBox(
                         height: 20,
                       ),
-                      FlatButton(
+                      OutlinedButton(
                         child: Text(
-                          'Signup',
+                          'Registrarse',
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
-                        shape: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2),
-                          borderRadius: BorderRadius.circular(5),
+                        style:OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.all(13),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        padding: const EdgeInsets.all(15),
-                        textColor: Colors.white,
                         onPressed: () {
 
                           if(_keyForm.currentState!.validate()){
                             print("validacion exitosa");
-                            auth.createUserWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim()).then((_){
                             _signup();
-                            });
                           }else{
                             print("validacion exitosa");
                           }

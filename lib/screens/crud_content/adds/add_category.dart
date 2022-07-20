@@ -102,7 +102,7 @@ class _AddCategoryState extends State<AddCategory> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
+            Navigator.pop(context);
           },
         ),
       ),

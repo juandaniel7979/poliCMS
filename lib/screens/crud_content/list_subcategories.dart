@@ -6,7 +6,7 @@ import 'package:app/api/subcategory_api.dart';
 import 'package:app/screens/crud_content/List_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
 import 'package:app/screens/crud_content/detail_content.dart';
-import 'package:app/screens/crud_content/edit_subcategories.dart';
+import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -207,13 +207,6 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
               },
               child: Icon(Icons.video_collection),
               // label: subcategories[1].url==""? "Alguna monda":"Esta monda"
-          ),
-          SpeedDialChild(
-              onTap: (){
-
-              },
-              child: Icon(Icons.upload),
-              label: 'Subir contenido'
           ),
           SpeedDialChild(
               onTap: (){

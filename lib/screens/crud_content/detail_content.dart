@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_content.dart';
+import 'package:app/screens/crud_content/edits/edit_content.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_conditional_rendering/conditional.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'dart:convert';
@@ -18,14 +20,6 @@ import 'dart:typed_data';
 // String email='';
 
 
-class DetailContentPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-    );
-  }
-}
 
 
 class DetailContent extends StatefulWidget{
@@ -33,13 +27,14 @@ class DetailContent extends StatefulWidget{
 
   final String id;
   final String id_subcategoria;
+  final String id_content;
   final String email;
   final String nombre;
   final String subcategoria;
   final String descripcion;
   final String url;
 
-  DetailContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
+  DetailContent({required this.id,required this.id_subcategoria, required this.id_content, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
 
 
   _DetailContentState createState() => _DetailContentState();
@@ -49,7 +44,7 @@ class DetailContent extends StatefulWidget{
 
 quill.QuillController _controller = quill.QuillController.basic();
 
-
+var editar = 0;
 
 class _DetailContentState extends State<DetailContent> {
   late List data= [];
@@ -59,29 +54,8 @@ class _DetailContentState extends State<DetailContent> {
 
   String MyJson = '';
 
-   void _getData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var url='https://poli-cms.herokuapp.com/api/contenido/contenidos?id=${widget.id_subcategoria}';
-    // var url='http://192.168.1.1:3002/api/contenido/contenidos?id=62a9548b6adf304f2aecb54b';
-    var token= sharedPreferences.getString("token");
+  void _getData() async {
 
-    try{
-      final response = await http.get(
-          Uri.parse(url),
-          headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'}
-      );
-      var res = jsonDecode(response.body);
-      // print(response.body);
-      print(widget.descripcion);
-      // final line = response.body.toString();
-      final line = widget.descripcion;
-      final regex = RegExp(r'ion":[^]*]');
-      final match = regex.firstMatch(line);
-      final everything = match?.group(0);
-      print(everything);
-      final extraccion = everything.toString().replaceAll('ion":"',"").replaceAll('\\"','"').replaceAll("\\\\n", '\\n').replaceAll(',"estado":0,"__v":0}]', '').replaceAll('","descripcion_2":[]', '').replaceAll(']"', ']');
-      print('#\n');
-      print(extraccion);
       try{
         print('entro aqui');
         // final doc = quill.Document.fromJson(jsonDecode(result));
@@ -92,17 +66,15 @@ class _DetailContentState extends State<DetailContent> {
               document: doc, selection: const TextSelection.collapsed(offset: 0));
         });
       }catch(e){
-        print('luego aqui');
+        print('Cayo en el catch');
         final doc = quill.Document()..insert(0, 'Empty asset');
         setState(() {
           _controller = quill.QuillController(
               document: doc, selection: const TextSelection.collapsed(offset: 0));
         });
       }
-    }catch (e){
-      print(e);
-    }
   }
+
   @override
   void initState() {
     super.initState();
@@ -140,51 +112,10 @@ class _DetailContentState extends State<DetailContent> {
                       ]
                   ),
                   child: quill.QuillEditor.basic(controller: _controller, readOnly: true),
+                  // quill.QuillEditor.basic(controller: _controller, readOnly: false),
                 ),
               )
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              OutlinedButton(onPressed: (){
-                _controller.document.delete(0, _controller.document.length);
-                print(jsonEncode(_controller.document.toDelta().toJson()));
-                print(_controller.document.toPlainText());
-              }, child:Text('Eliminar contenido',style:TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
-                style:
-                OutlinedButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.all(13),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )
-                ),
-                // Text('Añadir contenido',textS)
-              ),
-              OutlinedButton(onPressed: (){
-                var Myjson= jsonEncode(_controller.document.toDelta().toJson());
-                print('el json');
-                print(_controller.document.toDelta().toJson());
-                print('en texto plano');
-                print(_controller.document.toPlainText());
-                // var jsonObj = json.
-                print(Myjson);
-              }, child:Text('Agregar contenido',style:TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
-                style:
-                OutlinedButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.all(13),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )
-                ),
-                // Text('Añadir contenido',textS)
-              ),
-            ],
-          ),
-
         ],
       ),
       floatingActionButton: SpeedDial(
@@ -193,7 +124,7 @@ class _DetailContentState extends State<DetailContent> {
         children: [
           SpeedDialChild(
               onTap: (){
-                _getData();
+                // _getData();
               },
               child: Icon(Icons.video_collection),
               label: 'Copiar'
@@ -202,10 +133,10 @@ class _DetailContentState extends State<DetailContent> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,url: widget.url,)));
+                    MaterialPageRoute(builder: (context) => EditContent(id:widget.id,id_subcategoria:widget.id_subcategoria,id_content:widget.id_content,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,url: widget.url,)));
               },
-              child: Icon(Icons.upload),
-              label: 'Añadir contenido'
+              child: Icon(Icons.edit),
+              label: editar==0 ? 'Editar publicacion': 'Guardar publicacion'
           ),
         ],
 
