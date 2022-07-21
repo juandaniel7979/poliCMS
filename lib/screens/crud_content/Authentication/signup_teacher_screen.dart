@@ -60,7 +60,7 @@ class _SignupPageState extends State<SignupPageTeacher> {
         print("Token "+jsonResponse['token']);
         if(jsonResponse != null) {
           sharedPreferences.setString("token", jsonResponse['token']);
-          Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
+          Navigator.pushReplacementNamed(context, LoginScreenTeacher.routeName);
         }
       }
       else {

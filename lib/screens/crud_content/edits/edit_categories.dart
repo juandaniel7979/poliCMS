@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/Authentication/login_student_screen.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
+import 'package:app/screens/my_categories.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -18,23 +19,22 @@ class AddCategoryPage extends StatelessWidget {
   }
 }
 
-class EditSubcategory extends StatefulWidget{
-  static const routeName = '/EditSubcategory';
+class EditCategory extends StatefulWidget{
+  static const routeName = '/EditCategory';
   final String id;
   final String id_categoria;
-  final String id_subcategoria;
   final String email;
   final String nombre;
-  final String categoria;
+  final String nombre_categoria;
   final String descripcion;
 
-  EditSubcategory({required this.id, required this.id_categoria,required this.id_subcategoria, required this.email, required this.nombre, required this.categoria, required this.descripcion});
+  EditCategory({required this.id,required this.id_categoria,required this.nombre_categoria,required this.nombre,required this.email,required this.descripcion});
 
-  _EditSubcategoryState createState() => _EditSubcategoryState();
+  _EditCategoryState createState() => _EditCategoryState();
 
 }
 
-class _EditSubcategoryState extends State<EditSubcategory> {
+class _EditCategoryState extends State<EditCategory> {
 
   final _keyForm = GlobalKey<FormState>();
 
@@ -48,21 +48,21 @@ class _EditSubcategoryState extends State<EditSubcategory> {
   @override
   void initState() {
     super.initState();
-    TitleController.text=widget.categoria;
+    TitleController.text=widget.nombre_categoria;
     DescriptionController.text=widget.descripcion;
   }
 
 
 
-  Future _EditSubcategory() async {
+  Future _EditCategory() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token= sharedPreferences.getString("token");
     String title = TitleController.text;
     String description = DescriptionController.text;
-    var data = {'id_subcategoria':widget.id_subcategoria,'nombre':title,'descripcion': description};
+    var data = {'id_categoria':widget.id_categoria,'nombre':title,'descripcion': description};
     final response = await http.put(
-        Uri.parse("http://192.168.56.1:3002/api/subcategoria/editar"),
-        body:json.encode({'id_subcategoria':widget.id_subcategoria,'nombre':title,'descripcion': description}),
+        Uri.parse("http://192.168.56.1:3002/api/categoria/editar"),
+        body:json.encode({'id_categoria':widget.id_categoria,'nombre':title,'descripcion': description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
 
@@ -74,14 +74,14 @@ class _EditSubcategoryState extends State<EditSubcategory> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Se ha editado la subcategoria con exito"),
+            title: new Text("Se ha editado la categoria con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
+                      MaterialPageRoute(builder: (context) => MyCategories(id:widget.id,email: widget.email,nombre: widget.nombre))
                   );
                   // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
                 },
@@ -96,7 +96,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(jsonResponse['error']),
+            title: new Text(jsonResponse['message']),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -117,7 +117,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Center(child: Text('Editar subcategoria'),),
+        title: Center(child: Text('Editar categoria'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -125,8 +125,13 @@ class _EditSubcategoryState extends State<EditSubcategory> {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
-            );
+                MaterialPageRoute(builder: (context) => ListSubcategories(
+                    id:widget.id,
+                    id_categoria:widget.id_categoria,
+                    email: widget.email,
+                    nombre: widget.nombre,
+                    categoria: widget.nombre_categoria,
+                    descripcion:widget.descripcion)));
           },
         ),
       ),
@@ -222,7 +227,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
                       ),
                       OutlinedButton(
                         child: Text(
-                          'Editar subcategoria',
+                          'Editar categoria',
                           style: TextStyle(
                               fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                           ),
@@ -239,7 +244,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
                         onPressed: () {
                           if(_keyForm.currentState!.validate()){
                             print("validacion exitosa");
-                            _EditSubcategory();
+                            _EditCategory();
                           }else{
                             print("validacion erronea");
                           }

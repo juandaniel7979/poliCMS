@@ -1,14 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:app/Widgets/main_drawer.dart';
-import 'package:app/screens/crud_content/adds/add_category.dart';
-import 'package:app/screens/crud_content/list_subcategories.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:app/screens/explore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 // String id='';
 // String nombre='';
@@ -26,12 +23,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+String id="";
+String nombre="";
+String correo="";
 
   @override
   void initState() {
     super.initState();
+    getUser();
   }
+
+  void getUser()async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var  token = sharedPreferences.getString('token');
+    var url='http://192.168.56.1:3002/api/user/profesor';
+    final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          'auth-token': '${token}'
+        }
+    );
+    var res = jsonDecode(response.body);
+    print(response.body);
+    print(res['id']);
+    print(res.toString());
+    setState(() {
+      id=res['id'];
+      nombre=res['nombre'];
+      correo=res['email'];
+    });
+
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Inicio'),
       ),
-      drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
+      // drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
+      drawer: MainDrawer(id:id,email: correo, nombre: nombre),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                 ),
                 onPressed: () {
-
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Explorer(id:widget.id,email: widget.email,nombre: widget.nombre))
+                  );
                 }
               ),
             ),
@@ -91,10 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
             
           ],
         ),
-
-
       ),
-
     );
   }
 

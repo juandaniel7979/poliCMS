@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/Widgets/search_widget.dart';
 import 'package:app/api/subcategory_api.dart';
 import 'package:app/screens/crud_content/List_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
-import 'package:app/screens/crud_content/detail_content.dart';
+import 'package:http/http.dart' as http;
 import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 
@@ -50,11 +52,30 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
   late List<Subcategory> subcategories =[];
   String query = '';
   Timer? debouncer;
+  String url = "";
+  final _keyForm = GlobalKey<FormState>();
+  final UrlController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     this.init();
+    this.getUrl();
+  }
+  
+  void getUrl()async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+
+    final response = await http.get(Uri.parse("http://192.168.56.1:3002/api/categoria/url?id=${widget.id_categoria}"),
+    headers: {HttpHeaders.contentTypeHeader: 'application/json',
+      'auth-token': '${token}'});
+    final res = jsonDecode(response.body);
+    print(res['url']);
+    setState(() {
+      url = res['url'];
+    });
+    print(response.body);
   }
 
   @override
@@ -80,6 +101,44 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       this.subcategories=subcategories;
     });
   }
+
+  Future AddUrl(String url)async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+    final response = await http.put(Uri.parse("http://192.168.56.1:3002/api/categoria/url"),
+      body: jsonEncode({'url': url,'id_categoria':widget.id_categoria}),
+      headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'},
+    );
+
+    print(response.body);
+    if(response.statusCode==200){
+      print('Se ha actualizado con exito');
+      // return AlertDialog(
+      //   title: Text("Se ha configurado la url con exito"),
+      //   ,
+      // );
+
+    }else{
+      print('Se ha actualizado con exito');
+    }
+
+  }
+
+  Future _DeleteElement( id_categoria) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+    var datos= {"id":id_categoria};
+    final response = await http.put(
+        Uri.parse("http://192.168.56.1:3002/api/subcategoria/borrar"),
+        body:json.encode(datos),
+        headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
+    print(response.body);
+
+    // print(data[1]["nombre"]);
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,8 +164,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                       nombre: widget.nombre,
                       subcategoria: subcategories[index].nombre,
                       descripcion:subcategories[index].descripcion,
-                      url:subcategories[index].url
-                      ,)
+                      )
                     ));
                   },
                   child: Card(
@@ -156,11 +214,12 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                                             TextButton(
                                               // onPressed: () => Navigator.pop(context, 'OK'),
                                               onPressed: () {
-                                                // _DeleteElement(data[index]['id_subcategoria']);
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
-                                                // );
+
+                                                _DeleteElement(subcategories[index].id);
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion,id_categoria: subcategories[index].id_categoria,))
+                                                );
                                               },
                                               child: const Text('OK'),
                                             ),
@@ -202,11 +261,21 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
             // label: subcategories[1].url==""? "Alguna monda":"Esta monda"
           ),
           SpeedDialChild(
-              onTap: (){
-                // _getData();
-              },
-              child: Icon(Icons.video_collection),
-              // label: subcategories[1].url==""? "Alguna monda":"Esta monda"
+              child: Conditional.single(
+                context: context,
+                conditionBuilder: (BuildContext context) => url=="",
+                widgetBuilder: (BuildContext context) => Icon(Icons.folder),
+                fallbackBuilder: (BuildContext context) => Icon(Icons.launch),
+              ),
+              onLongPress: (){openDialog();},
+              label: url==""? "Añadir enlace de drive":"Redirigir a drive",
+              onTap:() async{
+                if(url==""){
+                  openDialog();
+                }else{
+                  await openBrowseURL( url: 'https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing');
+                }
+              }
           ),
           SpeedDialChild(
               onTap: (){
@@ -224,6 +293,8 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       ),
     );
   }
+
+
 
 
   Widget buildSearch()=>SearchWidget(
@@ -246,19 +317,31 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       await launchUrl(Uri.parse(url),);
     }
   }
-
   Future openDialog() => showDialog(
     context: context,
     builder: (context)=>AlertDialog(
       title: Text('Agregar repositorio de drive'),
       content: Form(
+        key: _keyForm,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
+              validator: (valor){
+                RegExp regExp = new RegExp(r'(http|https):\/\/drive.google.com\/drive\/folders\/[^?]*\?usp=sharing');
+                if(valor!.isEmpty){
+                  return 'Este campo no puede estar vacío';
+                }else if (!regExp.hasMatch(valor)){
+                  return "Ingresa una url valida";
+                }
+                return null;
+              },
               decoration: InputDecoration(
-                  hintText: "Ingresa el nombre de la categoria"
+                  hintText: "Ingresa la url del drive"
               ),
+              controller: UrlController,
+              keyboardType: TextInputType.text,
+              style: TextStyle(fontSize: 18, color: Colors.black54),
             ),
           ],
         ),
@@ -266,13 +349,24 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
       actions: [
         TextButton(
             onPressed: (){
-
+              Navigator.pop(context);
+            },
+            child:Text('Cancel')),
+        TextButton(
+            onPressed: ()async {
+              if(_keyForm.currentState!.validate()){
+                await AddUrl(UrlController.text);
+                getUrl();
+                Navigator.pop(context);
+              }
+              else{
+                print("validacion erronea");
+              }
             },
             child:Text('SUBMIT'))
       ],
     ),
   );
-
 
 
 

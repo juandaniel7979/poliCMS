@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/detail_content.dart';
+import 'package:app/screens/crud_content/edits/edit_content.dart';
+import 'package:app/screens/crud_content/edits/edit_content_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_conditional_rendering/conditional.dart';
@@ -39,9 +41,8 @@ class ListContent extends StatefulWidget{
   final String nombre;
   final String subcategoria;
   final String descripcion;
-  final String url;
 
-  ListContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
+  ListContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion});
 
   _ListContentState createState() => _ListContentState();
 }
@@ -81,8 +82,6 @@ class _ListContentState extends State<ListContent> {
 
   Future init() async {
     final contents = await ContentApi.getContent(query,widget.id_subcategoria);
-    print(widget.url);
-    print(widget.id_subcategoria);
     setState(() {
       this.contents=contents;
     });
@@ -109,6 +108,23 @@ class _ListContentState extends State<ListContent> {
     }
 
   }
+
+  Future _DeleteElement( id_categoria) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+    var datos= {"id":id_categoria};
+    final response = await http.put(
+        Uri.parse("http://192.168.56.1:3002/api/subcategoria/borrar"),
+        body:json.encode(datos),
+        headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
+    print(response.body);
+
+    // print(data[1]["nombre"]);
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,19 +140,37 @@ class _ListContentState extends State<ListContent> {
                 itemCount: contents ==null ? 0 :contents.length,
                 itemBuilder: (BuildContext context,int index){
                   return new GestureDetector(
+                    onLongPress: (){
+                    if(widget.id ==contents[index].id_profesor){
+                      MaterialPageRoute(builder:
+                          (context) => EditContent(
+                        id:widget.id,
+                        id_profesor:contents[index].id_profesor,
+                        id_subcategoria:contents[index].id_subcategoria,
+                        id_content:contents[index].id,
+                        email: widget.email,
+                        nombre: widget.nombre,
+                        subcategoria: widget.subcategoria,
+                        descripcion:contents[index].descripcion,
+                        )
+                      );
+                    }else{
+                      null;
+                    }
+                    },
                     onTap: (){
                       Navigator.push(context,
                           MaterialPageRoute(builder:
                               (context) => DetailContent(
-                            id:contents[index].id,
+                            id:widget.id,
+                            id_profesor:contents[index].id_profesor,
                             id_subcategoria:contents[index].id_subcategoria,
                             id_content:contents[index].id,
                             email: widget.email,
                             nombre: widget.nombre,
-                            subcategoria: contents[index].nombre,
+                            subcategoria: widget.subcategoria,
                             descripcion:contents[index].descripcion,
-                            url:widget.url
-                            ,)
+                            )
                           ));
                     },
                     child: Card(
@@ -148,6 +182,66 @@ class _ListContentState extends State<ListContent> {
                               title: Text('Publicacion: '+contents[index].nombre,
                                 style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Text('Descripcion: '+contents[index].descripcion_corta),
+                            ),
+                            Conditional.single(
+                              context: context,
+                              conditionBuilder: (BuildContext context) => contents[index].id_profesor==widget.id,
+                              widgetBuilder: (BuildContext context) => Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  TextButton(
+                                    child: const Text('EDIT'),
+                                    onPressed: () {
+                                      Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                                          EditContentHeader(id: widget.id,
+                                        id_contenido:contents[index].id,
+                                        subcategoria:widget.subcategoria,
+                                        email: widget.email,
+                                        nombre: widget.nombre,
+                                        descripcion: contents[index].descripcion,
+                                        nombre_contenido: contents[index].nombre,
+                                        id_subcategoria: widget.id_subcategoria,)));
+                                    },
+                                  ),
+                                  const SizedBox(width: 8),
+                                  TextButton(
+                                    child: const Text('DELETE',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: const Text('Eliminar'),
+                                            content: const Text('Está seguro que desea eliminar este elemento?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                // onPressed: () => Navigator.pop(context, 'OK'),
+                                                onPressed: () {
+
+                                                  _DeleteElement(contents[index].id);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => ListContent(id:widget.id,email: widget.email,nombre: widget.nombre,id_subcategoria: widget.id_subcategoria,descripcion:widget.descripcion,subcategoria: widget.subcategoria,))
+                                                  );
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                      // showAlertDialog(context,data[index]['id_subcategoria']
+                                      // );
+                                      // },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                ],
+                              ),
+                              fallbackBuilder: (BuildContext context) => Text(''),
                             ),
                           ]),
                     ),
@@ -162,27 +256,11 @@ class _ListContentState extends State<ListContent> {
         backgroundColor: Colors.green,
         animatedIcon: AnimatedIcons.menu_close,
         children: [
-      SpeedDialChild(
-      child: Conditional.single(
-      context: context,
-        conditionBuilder: (BuildContext context) => widget.url=="",
-        widgetBuilder: (BuildContext context) => Icon(Icons.folder),
-        fallbackBuilder: (BuildContext context) => Icon(Icons.launch),
-      ),
-        label: widget.url==""? "Añadir enlace de drive":"Redirigir a drive",
-        onTap:() async{
-        if(widget.url==""){
-          openDialog();
-        }else{
-          await openBrowseURL( url: 'https://drive.google.com/drive/folders/1WPsk7EmYGzCUAz1lQ6n1qidvUYIPBKuD?usp=sharing');
-        }
-        }
-    ),
           SpeedDialChild(
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,url: widget.url,)));
+                    MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria)));
               },
               child: Icon(Icons.add),
               label: 'Agregar contenido'
@@ -226,7 +304,7 @@ class _ListContentState extends State<ListContent> {
           children: [
             TextFormField(
               validator: (valor){
-                RegExp regExp = new RegExp(r'(http|https):\/\/drive.google.com\/drive\/folders\/[a-zA-Z-1-9]*\?usp=sharing');
+                RegExp regExp = new RegExp(r'(http|https):\/\/drive.google.com\/drive\/folders\/[^?]*\?usp=sharing');
                 if(valor!.isEmpty){
                   return 'Este campo no puede estar vacío';
                 }else if (!regExp.hasMatch(valor)){
@@ -247,8 +325,14 @@ class _ListContentState extends State<ListContent> {
       actions: [
         TextButton(
             onPressed: (){
+              Navigator.pop(context);
+            },
+            child:Text('Cancel')),
+        TextButton(
+            onPressed: (){
               if(_keyForm.currentState!.validate()){
                 AddUrl(UrlController.text);
+                Navigator.pop(context);
               }
               else{
                 print("validacion erronea");

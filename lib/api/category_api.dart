@@ -23,9 +23,10 @@ class CategoryApi{
 
       return categories.map((json)=> Category.fromJson(json)).where((category){
         final tituloSubcat = category.nombre.toLowerCase();
+        final profeosorSubcat = category.nombre_profesor.toLowerCase();
         final searchLower = query.toLowerCase();
 
-        return tituloSubcat.contains(searchLower);
+        return tituloSubcat.contains(searchLower) || profeosorSubcat.contains(searchLower);
       }).toList();
     }else{
       throw Exception();

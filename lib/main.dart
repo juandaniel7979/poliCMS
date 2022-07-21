@@ -4,6 +4,7 @@ import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/adds/add_subcategory.dart';
 import 'package:app/screens/crud_content/detail_content.dart';
 import 'package:app/screens/crud_content/detail_content_student.dart';
+import 'package:app/screens/crud_content/edits/edit_categories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
@@ -11,8 +12,6 @@ import 'package:app/screens/explore.dart';
 import 'package:app/screens/home_screen_student.dart';
 import 'package:app/screens/my_categories.dart';
 import 'package:app/screens/onboarding_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './screens/home_screen.dart';
@@ -25,7 +24,6 @@ import './screens/access_code.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp( MyApp());
 
 }
@@ -35,6 +33,7 @@ String id = '';
 String id_subcategoria = '';
 String id_content = '';
 String id_categoria = '';
+String id_profesor = '';
 String email = '';
 String nombre = '';
 String categoria = '';
@@ -81,6 +80,13 @@ class MyApp extends StatelessWidget {
             email: email,
             categoria: categoria,
             descripcion: descripcion),
+        EditCategory.routeName: (BuildContext context) => EditCategory(
+            id: id,
+            id_categoria: id_categoria,
+            nombre: nombre,
+            email: email,
+            nombre_categoria: categoria,
+            descripcion: descripcion),
         ListSubcategories.route: (BuildContext context) => ListSubcategories(
             id: id,
             id_categoria: id_categoria,
@@ -110,17 +116,18 @@ class MyApp extends StatelessWidget {
                 nombre: nombre,
                 email: email,
                 subcategoria: subcategoria,
-                descripcion: descripcion,
-                url:url
-        ),DetailContent.route:(BuildContext context)=> DetailContent(
+                descripcion: descripcion
+        ),
+        DetailContent.route:(BuildContext context)=> DetailContent(
+
                 id: id,
+                id_profesor: id_profesor,
                 id_subcategoria:id_subcategoria,
                 id_content: id_content,
                 nombre: nombre,
                 email: email,
                 subcategoria: subcategoria,
                 descripcion: descripcion,
-                url:url
         ),
         AddContent.routeName:(BuildContext context)=> AddContent(
             id: id,
@@ -129,7 +136,6 @@ class MyApp extends StatelessWidget {
             email: email,
             subcategoria: subcategoria,
             descripcion: descripcion,
-            url:url
         ),
       },
     );
@@ -163,16 +169,17 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-          return HomeScreen(id: id, email: email, nombre: nombre);
-          }else{
-            return GettingStarted();
-          }
-        },
-      ),
+      body: Text('')
+      // StreamBuilder<User?>(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context,snapshot){
+      //     if(snapshot.hasData){
+      //     return HomeScreen(id: id, email: email, nombre: nombre);
+      //     }else{
+      //       return GettingStarted();
+      //     }
+      //   },
+      // ),
     );
   }
 }

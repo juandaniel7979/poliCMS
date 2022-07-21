@@ -26,9 +26,8 @@ class AddContent extends StatefulWidget{
   final String nombre;
   final String subcategoria;
   final String descripcion;
-  final String url;
 
-  AddContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
+  AddContent({required this.id,required this.id_subcategoria, required this.email,required this.nombre,required this.subcategoria,required this.descripcion});
   _AddContentState createState() => _AddContentState();
 
 }
@@ -52,8 +51,8 @@ class _AddContentState extends State<AddContent> {
     String title = TitleController.text;
     String description = DescriptionController.text;
     final response = await http.post(
-        Uri.parse('http://192.168.1.1:3002/api/contenido/contenido'),
-        body:json.encode({'nombre':title,'id_subcategoria':widget.id_subcategoria,'descripcion_corta':description,'descripcion': jsonEncode(_controller.document.toDelta().toJson())}),
+        Uri.parse('http://192.168.56.1:3002/api/contenido/contenido'),
+        body:json.encode({'nombre':title,'id_subcategoria':widget.id_subcategoria,'descripcion_corta':description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(widget.id_subcategoria);
     print(response.body);
@@ -65,12 +64,13 @@ class _AddContentState extends State<AddContent> {
       return showDialog(
         context: context,
         builder: (context)=>AlertDialog(
-          title: Text('Agregar repositorio de drive'),
+          title: Text('La publicacion se ha agregado con exito'),
           content: Text(res['message']),
           actions: [
             TextButton(
                 onPressed: (){
-
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=> ListContent(id: widget.id, id_subcategoria: widget.id_subcategoria, email: widget.email, nombre: widget.nombre, subcategoria: widget.subcategoria, descripcion: widget.descripcion)));
                 },
                 child:Text('SUBMIT'))
           ],
@@ -155,11 +155,6 @@ class _AddContentState extends State<AddContent> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(18),
-              //Barra de herramientas
-              child: QuillToolbar.basic(controller: _controller),
-            ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
               child: TextFormField(
@@ -213,62 +208,13 @@ class _AddContentState extends State<AddContent> {
               ),
               ),
             ),
-            Expanded(
-                child:Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-              child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    // BoxShadow(
-                    //   color: Colors.lightBlueAccent,
-                    //   offset:const Offset(5.0, 5.0),
-                    //   blurRadius:10.0,
-                    //   spreadRadius:2.0
-                    // ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset:const Offset(0.0, 0.0,),
-                      blurRadius:0.0,
-                      spreadRadius:0.0,
-                    ),
-                  ]
-                ),
-                child: QuillEditor.basic(controller: _controller, readOnly: false),
-              ),
-            )
-            ),
             Flexible(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     OutlinedButton(onPressed: (){
-                      _controller.document.delete(0, _controller.document.length);
-                      print(jsonEncode(_controller.document.toDelta().toJson()));
-                      print(_controller.document.toPlainText());
-                    }, child:Texto.Text('Eliminar contenido',style:Texto.TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
-                      style:
-                      OutlinedButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: Colors.green,
-                          padding: EdgeInsets.all(13),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                      ),
-
-                      // Text('Añadir contenido',textS)
-                    ),
-                    OutlinedButton(onPressed: (){
                       if(_keyForm.currentState!.validate()){
-                        if(!_controller.document.isEmpty()){
-                          var Myjson= jsonEncode(_controller.document.toDelta().toJson());
-                          // print(_controller.document.toDelta().toJson());
                           _AddContent();
-                          _controller.document.delete(0, _controller.document.length);
-                          // print(Myjson);
-                        }
-                        // print("validacion exitosa");
-
                       }else{
                         print("validacion erronea");
                       }

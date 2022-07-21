@@ -3,6 +3,7 @@ import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/main.dart';
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/adds/add_category.dart';
+import 'package:app/screens/crud_content/edits/edit_categories.dart';
 import 'package:app/screens/crud_content/edits/edit_subcategories.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -106,7 +107,9 @@ class _MyCategoriesState extends State<MyCategories> {
                     TextButton(
                       child: const Text('EDIT'),
                       onPressed: () {
-                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>(id: data[index]['id_subcategoria'], nombre: data[index]['nombre'], descripcion: data[index]['descripcion'])));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>
+                                EditCategory(id:widget.id,nombre:widget.nombre,email: widget.email,id_categoria: data[index]['_id'],nombre_categoria: data[index]['nombre'], descripcion: data[index]['descripcion'])));
                       },
                     ),
                     const SizedBox(width: 8),

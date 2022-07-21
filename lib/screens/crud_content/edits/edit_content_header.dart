@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/main.dart';
 import 'package:app/screens/crud_content/Authentication/login_student_screen.dart';
+import 'package:app/screens/crud_content/List_content.dart';
 import 'package:app/screens/crud_content/list_subcategories.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -18,23 +19,25 @@ class AddCategoryPage extends StatelessWidget {
   }
 }
 
-class EditSubcategory extends StatefulWidget{
-  static const routeName = '/EditSubcategory';
+class EditContentHeader extends StatefulWidget{
+  static const routeName = '/EditContentHeader';
   final String id;
-  final String id_categoria;
+  final String id_contenido;
   final String id_subcategoria;
   final String email;
   final String nombre;
-  final String categoria;
+  final String nombre_contenido;
+  final String subcategoria;
   final String descripcion;
 
-  EditSubcategory({required this.id, required this.id_categoria,required this.id_subcategoria, required this.email, required this.nombre, required this.categoria, required this.descripcion});
 
-  _EditSubcategoryState createState() => _EditSubcategoryState();
+  EditContentHeader({required this.id,required this.id_contenido, required this.email,required this.nombre,required this.id_subcategoria,required this.nombre_contenido,required this.subcategoria,required this.descripcion});
+
+  _EditContentHeaderState createState() => _EditContentHeaderState();
 
 }
 
-class _EditSubcategoryState extends State<EditSubcategory> {
+class _EditContentHeaderState extends State<EditContentHeader> {
 
   final _keyForm = GlobalKey<FormState>();
 
@@ -48,21 +51,21 @@ class _EditSubcategoryState extends State<EditSubcategory> {
   @override
   void initState() {
     super.initState();
-    TitleController.text=widget.categoria;
+    TitleController.text=widget.nombre_contenido;
     DescriptionController.text=widget.descripcion;
   }
 
 
 
-  Future _EditSubcategory() async {
+  Future _EditContentHeader() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token= sharedPreferences.getString("token");
     String title = TitleController.text;
     String description = DescriptionController.text;
-    var data = {'id_subcategoria':widget.id_subcategoria,'nombre':title,'descripcion': description};
+    var data = {'id_contenido':widget.id_contenido,'nombre':title,'descripcion': description};
     final response = await http.put(
         Uri.parse("http://192.168.56.1:3002/api/subcategoria/editar"),
-        body:json.encode({'id_subcategoria':widget.id_subcategoria,'nombre':title,'descripcion': description}),
+        body:json.encode({'id_contenido':widget.id_contenido,'nombre':title,'descripcion': description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
 
@@ -81,7 +84,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
+                      MaterialPageRoute(builder: (context) => ListContent(id:widget.id,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,id_subcategoria: widget.id,descripcion:widget.descripcion))
                   );
                   // Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
                 },
@@ -125,7 +128,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListSubcategories(id:widget.id,id_categoria:widget.id_categoria,email: widget.email,nombre: widget.nombre,categoria: widget.categoria,descripcion:widget.descripcion))
+                MaterialPageRoute(builder: (context) => ListContent(id:widget.id,id_subcategoria:widget.id_subcategoria,email: widget.email,nombre: widget.nombre,subcategoria:widget.subcategoria ,descripcion:widget.descripcion))
             );
           },
         ),
@@ -239,7 +242,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
                         onPressed: () {
                           if(_keyForm.currentState!.validate()){
                             print("validacion exitosa");
-                            _EditSubcategory();
+                            _EditContentHeader();
                           }else{
                             print("validacion erronea");
                           }

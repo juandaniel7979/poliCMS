@@ -1,9 +1,7 @@
 import 'package:app/screens/getting_started.dart';
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/crud_content/Authentication/signup_teacher_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:email_validator/email_validator.dart';
@@ -13,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String username= '';
 String password = '';
-final storage = new FlutterSecureStorage();
 
 class LoginScreenTeacher extends StatelessWidget {
   static const routeName = '/login-teacher';
@@ -61,8 +58,13 @@ class _LoginPageState extends State<LoginPageTeacher> {
           setState(() {
             _isLoading = false;
           });
+          var nombre = jsonResponse['data']['user']['nombre']+jsonResponse['data']['user']['nombre_2']+jsonResponse['data']['user']['apellido']+jsonResponse['data']['user']['apellido_2'];
           sharedPreferences.setString("token", jsonResponse['data']['token']);
           sharedPreferences.setString("rol", "profesor");
+          sharedPreferences.setString("nombre", nombre);
+          sharedPreferences.setString("id", jsonResponse['data']['_id']);
+          sharedPreferences.setString("correo", jsonResponse['data']['correo']);
+
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],nombre: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
         }
       }
@@ -192,12 +194,13 @@ class _LoginPageState extends State<LoginPageTeacher> {
                 ),
                   style:
                   OutlinedButton.styleFrom(
+                      backgroundColor: Colors.green,
                       primary: Colors.white,
                       surfaceTintColor: Colors.green,
                       shadowColor: Colors.green,
                       // backgroundColor: Colors.green,
                       padding: EdgeInsets.all(13),
-                      side: BorderSide(color: Colors.white,width: 2),
+                      side: BorderSide(color: Colors.green,width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       )
@@ -226,12 +229,13 @@ class _LoginPageState extends State<LoginPageTeacher> {
               ),
               style:
               OutlinedButton.styleFrom(
+                  backgroundColor: Colors.green,
                   primary: Colors.white,
                   surfaceTintColor: Colors.green,
                   shadowColor: Colors.green,
                   // backgroundColor: Colors.green,
                   padding: EdgeInsets.all(13),
-                  side: BorderSide(color: Colors.white,width: 2),
+                  side: BorderSide(color: Colors.green,width: 2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   )

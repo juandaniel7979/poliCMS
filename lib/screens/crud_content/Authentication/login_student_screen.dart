@@ -2,7 +2,6 @@ import 'package:app/screens/getting_started.dart';
 import 'package:app/screens/home_screen.dart';
 import 'package:app/screens/home_screen_student.dart';
 import 'package:app/screens/crud_content/Authentication/signup_student_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -30,7 +29,6 @@ class LoginPageStudent extends StatefulWidget{
 
 class _LoginPageStudentState extends State<LoginPageStudent> {
   final _keyForm = GlobalKey<FormState>();
-  final auth = FirebaseAuth.instance;
   bool _isLoading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -50,11 +48,6 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
       builder: (context)=>Center(child: CircularProgressIndicator()),
     );
 
-    try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo.trim(), password: contrasena.trim());
-    }on FirebaseAuthException catch(e){
-      print(e);
-    }
 
     var url ="https://poli-cms.herokuapp.com/api/user/login-estudiante";
 
@@ -63,18 +56,14 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
       jsonResponse = json.decode(response.body);
 
       if(jsonResponse != null) {
-        setState(() {
-          _isLoading = false;
-        });
+
         sharedPreferences.setString("token", jsonResponse['data']['token']);
         sharedPreferences.setString("rol", "estudiante");
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],nombre: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
       }
     }
     else {
-      setState(() {
-        _isLoading = false;
-      });
+
       jsonResponse = json.decode(response.body);
       msg= jsonResponse['message'];
       showDialog(
@@ -189,12 +178,13 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
                 ),
                 style:
                 OutlinedButton.styleFrom(
+                    backgroundColor: Colors.green,
                     primary: Colors.white,
                     surfaceTintColor: Colors.green,
                     shadowColor: Colors.green,
                     // backgroundColor: Colors.green,
                     padding: EdgeInsets.all(13),
-                    side: BorderSide(color: Colors.white,width: 2),
+                    side: BorderSide(color: Colors.green,width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     )
@@ -223,12 +213,13 @@ class _LoginPageStudentState extends State<LoginPageStudent> {
                 ),
                 style:
                 OutlinedButton.styleFrom(
+                    backgroundColor: Colors.green,
                     primary: Colors.white,
                     surfaceTintColor: Colors.green,
                     shadowColor: Colors.green,
                     // backgroundColor: Colors.green,
                     padding: EdgeInsets.all(13),
-                    side: BorderSide(color: Colors.white,width: 2),
+                    side: BorderSide(color: Colors.green,width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     )

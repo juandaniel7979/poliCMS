@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/Widgets/main_drawer.dart';
 import 'package:app/main.dart';
+import 'package:app/model/content.dart';
 import 'package:app/screens/crud_content/adds/add_content.dart';
 import 'package:app/screens/crud_content/edits/edit_content.dart';
 import 'package:flutter/foundation.dart';
@@ -28,13 +29,13 @@ class DetailContent extends StatefulWidget{
   final String id;
   final String id_subcategoria;
   final String id_content;
+  final String id_profesor;
   final String email;
   final String nombre;
   final String subcategoria;
   final String descripcion;
-  final String url;
 
-  DetailContent({required this.id,required this.id_subcategoria, required this.id_content, required this.email,required this.nombre,required this.subcategoria,required this.descripcion,required this.url});
+  DetailContent({required this.id,required this.id_subcategoria,required this.id_profesor, required this.id_content, required this.email,required this.nombre,required this.subcategoria,required this.descripcion});
 
 
   _DetailContentState createState() => _DetailContentState();
@@ -55,19 +56,32 @@ class _DetailContentState extends State<DetailContent> {
   String MyJson = '';
 
   void _getData() async {
-
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // var url='https://poli-cms.herokuapp.com/api/contenido/contenidos?id=${widget.id_subcategoria}';
+    var url='http://192.168.56.1:3002/api/contenido/contenido?id=${widget.id_content}';
+    var token= sharedPreferences.getString("token");
+      final response = await http.get(
+          Uri.parse(url),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+            'auth-token': '${token}'
+          }
+      );
+      var res = jsonDecode(response.body);
+      print(response.body);
+      final contenido =Content.fromJson(res['contenido']);
+      print(contenido.descripcion);
       try{
         print('entro aqui');
-        // final doc = quill.Document.fromJson(jsonDecode(result));
-        // final doc = quill.Document.fromJson(jsonDecode(extraccion));
-        final doc = quill.Document.fromJson(jsonDecode(widget.descripcion));
+        // final doc = quill.Document.fromJson(jsonDecode(widget.descripcion));
+        final doc = quill.Document.fromJson(jsonDecode(contenido.descripcion));
         this.setState(() {
           _controller = quill.QuillController(
               document: doc, selection: const TextSelection.collapsed(offset: 0));
         });
       }catch(e){
         print('Cayo en el catch');
-        final doc = quill.Document()..insert(0, 'Empty asset');
+        final doc = quill.Document()..insert(0, 'Esta publicacion se encuentra vacia');
         setState(() {
           _controller = quill.QuillController(
               document: doc, selection: const TextSelection.collapsed(offset: 0));
@@ -79,6 +93,8 @@ class _DetailContentState extends State<DetailContent> {
   void initState() {
     super.initState();
     this._getData();
+    print("id"+widget.id);
+    print("id profesor"+widget.id_profesor);
   }
 
   @override
@@ -131,12 +147,17 @@ class _DetailContentState extends State<DetailContent> {
           ),
           SpeedDialChild(
               onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditContent(id:widget.id,id_subcategoria:widget.id_subcategoria,id_content:widget.id_content,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria,url: widget.url,)));
+                if(widget.id==widget.id_profesor){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditContent(id:widget.id,id_subcategoria:widget.id_subcategoria,id_profesor: widget.id_profesor,id_content:widget.id_content,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria)));
+                }else{
+                  null;
+                }
+
               },
               child: Icon(Icons.edit),
-              label: editar==0 ? 'Editar publicacion': 'Guardar publicacion'
+              label: 'Editar publicacion'
           ),
         ],
 
