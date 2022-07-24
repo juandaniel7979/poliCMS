@@ -58,7 +58,7 @@ class _MyCategoriesState extends State<MyCategories> {
     var token= sharedPreferences.getString("token");
     var datos= {"id":id_categoria};
     final response = await http.put(
-        Uri.parse("http://192.168.56.1:3002/api/categoria/borrar"),
+        Uri.parse("https://poli-cms.herokuapp.com/api/categoria/borrar"),
         body:json.encode(datos),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
@@ -71,7 +71,8 @@ class _MyCategoriesState extends State<MyCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mis categorias'),
+        backgroundColor: Color.fromRGBO(25,104,68, 1),
+        title: Text('Mis tematicas'),
       ),
       drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
       body: new ListView.builder(
@@ -105,7 +106,7 @@ class _MyCategoriesState extends State<MyCategories> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     TextButton(
-                      child: const Text('EDIT'),
+                      child: const Text('EDIT',style: TextStyle(color: Color.fromRGBO(25,104,68, 1)),),
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context)=>
@@ -151,7 +152,7 @@ class _MyCategoriesState extends State<MyCategories> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(backgroundColor: Color.fromRGBO(25,104,68,1),
         onPressed: (){
       Navigator.push(
           context,

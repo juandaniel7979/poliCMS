@@ -51,7 +51,7 @@ class _AddContentState extends State<AddContent> {
     String title = TitleController.text;
     String description = DescriptionController.text;
     final response = await http.post(
-        Uri.parse('http://192.168.56.1:3002/api/contenido/contenido'),
+        Uri.parse('https://poli-cms.herokuapp.com/api/contenido/contenido'),
         body:json.encode({'nombre':title,'id_subcategoria':widget.id_subcategoria,'descripcion_corta':description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(widget.id_subcategoria);
@@ -137,7 +137,7 @@ class _AddContentState extends State<AddContent> {
     return Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         // title: Center(child: Text('Añadir categoria'),),
         centerTitle: true,
         elevation: 0,
@@ -222,7 +222,7 @@ class _AddContentState extends State<AddContent> {
                     style:
                     OutlinedButton.styleFrom(
                         primary: Colors.white,
-                        backgroundColor: Colors.green,
+                        backgroundColor:  Color.fromRGBO(25,104,68, 1),
                         padding: EdgeInsets.all(13),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

@@ -49,7 +49,7 @@ class _EditContentState extends State<EditContent> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token= sharedPreferences.getString("token");
     final response = await http.put(
-        Uri.parse('http://192.168.56.1:3002/api/contenido/editarPub'),
+        Uri.parse('https://poli-cms.herokuapp.com/api/contenido/editarPub'),
         body:json.encode({'id_contenido':widget.id_content,'descripcion':jsonEncode(_controllerEdit.document.toDelta().toJson())}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(jsonEncode(_controllerEdit.document.toDelta().toJson()).toString());
@@ -127,7 +127,7 @@ class _EditContentState extends State<EditContent> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor:  Color.fromRGBO(25,104,68, 1),
           // title: Center(child: Text('Añadir categoria'),),
           centerTitle: true,
           elevation: 0,
@@ -153,7 +153,7 @@ class _EditContentState extends State<EditContent> {
         ),
       floatingActionButton: SpeedDial(
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         animatedIcon: AnimatedIcons.menu_close,
         children: [
           SpeedDialChild(
@@ -214,8 +214,24 @@ class _EditContentState extends State<EditContent> {
             child:Text('CANCELAR')),
         TextButton(
             onPressed: (){
-              _controllerEdit.document.delete(0, _controllerEdit.document.length);
-              Navigator.pop(context);
+              if( _controllerEdit.document.isEmpty()){
+                showDialog(context: context, builder: (context)=> AlertDialog(
+                  title: Texto.Text("error"),
+                  content: Texto.Text("El documento ya se encuentra vacio"),
+                  actions: [
+                    TextButton(onPressed: (){
+                      Navigator.pop(context);
+                    },
+                        child:Texto.Text("OK")
+                    )
+                  ],
+                )
+                );
+              }else{
+                _controllerEdit.document.delete(0, _controllerEdit.document.length);
+                Navigator.pop(context);
+              }
+
             },
             child:Text('SUBMIT'))
       ],
@@ -234,28 +250,41 @@ class _EditContentState extends State<EditContent> {
             },
             child:Text('CANCELAR')),
         TextButton(
-            onPressed: (){
-
-              if(!_controllerEdit.document.isEmpty()){
-                _EditContent();
-
-                MaterialPageRoute(builder:
-                (context) =>DetailContent(id: widget.id, id_subcategoria: widget.id_subcategoria,id_profesor: widget.id_profesor, id_content: widget.id_content, email: widget.email, nombre: widget.nombre, subcategoria: widget.subcategoria, descripcion: widget.descripcion));
-              }else{
-              AlertDialog(
+            onPressed: ()async {
+              if(!_controllerEdit.document.isEmpty() && _controllerEdit.document.length>20){
+                await _EditContent();
+                Navigator.push(context,
+                    MaterialPageRoute(builder:
+                        (context) =>DetailContent(id: widget.id, id_subcategoria: widget.id_subcategoria,id_profesor: widget.id_profesor, id_content: widget.id_content, email: widget.email, nombre: widget.nombre, subcategoria: widget.subcategoria, descripcion: widget.descripcion)));
+              }else if(_controllerEdit.document.isEmpty()){
+              showDialog(context: context, builder: (context)=> AlertDialog(
                   title: Texto.Text("error"),
                   content: Texto.Text("El documento está vacio"),
                   actions: [
                     TextButton(onPressed: (){
                       Navigator.pop(context);
                     },
-                    child:Texto.Text("OK")
+                        child:Texto.Text("OK")
                     )
                   ],
+                )
+              );
+              }else if(_controllerEdit.document.length<20){
+                showDialog(context: context, builder: (context)=> AlertDialog(
+                  title: Texto.Text("error"),
+                  content: Texto.Text("La publicacion debe ser mayor a 20 caracteres"),
+                  actions: [
+                    TextButton(onPressed: (){
+                      Navigator.pop(context);
+                    },
+                        child:Texto.Text("OK")
+                    )
+                  ],
+                )
                 );
               }
+
               // _controllerEdit.document.delete(0, _controllerEdit.document.length);
-              Navigator.pop(context);
             },
             child:Text('SUBMIT'))
       ],

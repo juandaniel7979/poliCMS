@@ -24,31 +24,30 @@ class GettingStarted extends StatefulWidget {
       checkLoginStatus();
     }
 
-    void startPreferences() async {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      rol = await sharedPreferences.getString("rol");
-    }
+    // void startPreferences() async {
+    //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //   rol = await sharedPreferences.getString("rol");
+    // }
 
     void checkLoginStatus() async {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-      String? nombre = sharedPreferences.getString("nombre");
-      String? id = sharedPreferences.getString("id");
-      String? email = sharedPreferences.getString("email");
-      print(nombre);
-      print(id);
-      print(email);
-      if(sharedPreferences.getString("token") != null && sharedPreferences.getString("rol")=="profesor") {
+      if(sharedPreferences.getString("token") != null && sharedPreferences.getString("rol")=="profesor" || sharedPreferences.getString("rol")=="estudiantei") {
         // Navigator.pushReplacementNamed(context, );
         Navigator.push(context,
-        MaterialPageRoute(builder: (context)=>HomeScreen(id:id.toString() ,nombre:nombre.toString() ,email: email.toString(),)));
+        MaterialPageRoute(builder: (context)=>HomeScreen()));
       }
+      // else if(sharedPreferences.getString("token") != null && sharedPreferences.getString("rol")=="profesor"){
+      //   Navigator.push(context,
+      //       MaterialPageRoute(builder: (context)=>HomeScreen()));
+      // }
     }
 
     @override
   Widget build(BuildContext context) {
   return Scaffold(
-  backgroundColor: Colors.white,
+  // backgroundColor:  Color.fromRGBO(255, 203, 71, 1),
+  backgroundColor:  Color.fromRGBO(0, 0, 0, 0),
   body: Container(
   padding: const EdgeInsets.all(15),
   color: Theme.of(context).primaryColor,
@@ -58,7 +57,7 @@ class GettingStarted extends StatefulWidget {
   crossAxisAlignment: CrossAxisAlignment.stretch,
   children: <Widget>[
   Center(
-  child: Text('Eres profesor o estudiante'+rol.toString(),
+  child: Text('Eres profesor o estudiante',
   style: TextStyle(
   fontSize: 26,
   color: Colors.white,
@@ -73,7 +72,7 @@ class GettingStarted extends StatefulWidget {
   Navigator.pushReplacementNamed(context, LoginScreenTeacher.routeName);
   },
   style: ElevatedButton.styleFrom(
-  primary: Colors.green,
+  primary:  Color.fromRGBO(25,104,68, 1),
   padding: const EdgeInsets.all(15),
   ),
   child: Text('Profesor',
@@ -86,7 +85,7 @@ class GettingStarted extends StatefulWidget {
   Navigator.pushReplacementNamed(context, LoginScreenStudent.routeName);
   },
   style: ElevatedButton.styleFrom(
-  primary: Colors.green,
+  primary:  Color.fromRGBO(25,104,68, 1),
   padding: const EdgeInsets.all(15),
   ),
   child: Text('Estudiante',

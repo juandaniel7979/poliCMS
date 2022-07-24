@@ -64,7 +64,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
     String description = DescriptionController.text;
     var data = {'id_contenido':widget.id_contenido,'nombre':title,'descripcion': description};
     final response = await http.put(
-        Uri.parse("http://192.168.56.1:3002/api/subcategoria/editar"),
+        Uri.parse("https://poli-cms.herokuapp.com/api/subcategoria/editar"),
         body:json.encode({'id_contenido':widget.id_contenido,'nombre':title,'descripcion': description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
@@ -119,7 +119,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         title: Center(child: Text('Editar subcategoria'),),
         centerTitle: true,
         elevation: 0,
@@ -233,7 +233,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
                         style:
                         OutlinedButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: Colors.green,
+                            backgroundColor:  Color.fromRGBO(25,104,68, 1),
                             padding: EdgeInsets.all(13),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

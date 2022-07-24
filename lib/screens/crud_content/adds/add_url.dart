@@ -183,7 +183,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         title: Center(child: Text('Añadir subcategoria'),),
         centerTitle: true,
         elevation: 0,
@@ -294,7 +294,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                         style:
                         OutlinedButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: Colors.green,
+                            backgroundColor:  Color.fromRGBO(25,104,68, 1),
                             padding: EdgeInsets.all(13),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

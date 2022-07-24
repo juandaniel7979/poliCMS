@@ -84,7 +84,7 @@ class _SignupPageState extends State<SignupPageStudent> {
       backgroundColor: Colors.white,
       appBar: AppBar(
 
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         title: Center(child: Text('Registro'),),
         centerTitle: true,
         elevation: 0,
@@ -102,7 +102,7 @@ class _SignupPageState extends State<SignupPageStudent> {
             padding: const EdgeInsets.symmetric(
               horizontal: 30,
             ),
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
             width: double.infinity,
             child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -121,10 +121,17 @@ class _SignupPageState extends State<SignupPageStudent> {
                       //   'assets/images/login.php',
                       //   height: 130,
                       // ),
-                      Image.network(
-                        'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-                        height: 180,
-                      ),
+                      // Image.network(
+                      //   'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+                      //   height: 180,
+                      // ),
+                      // CircleAvatar(
+                      //   backgroundImage: AssetImage("assets/images/POLI-JIC.png"),
+                      //   radius: 150,
+                      // ),
+                      Center(
+                          child: Text("Registrate para empezar a explorar",
+                        style: TextStyle(fontSize: 42,fontWeight: FontWeight.bold),)),
                       SizedBox(
                         height: 20,
                       ),
@@ -142,12 +149,12 @@ class _SignupPageState extends State<SignupPageStudent> {
                           hintText: 'Correo electronico',
                           contentPadding: const EdgeInsets.all(15),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           prefixIcon: Icon(Icons.mail),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -173,11 +180,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                           hintText: 'Documento de identidad',
                           contentPadding: const EdgeInsets.all(15),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -204,11 +211,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                                 hintText: '1er nombre',
                                 contentPadding: const EdgeInsets.all(15),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
@@ -225,11 +232,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                                 hintText: '2do nombre',
                                 contentPadding: const EdgeInsets.all(15),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
@@ -259,11 +266,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                                 hintText: '1er apellido',
                                 contentPadding: const EdgeInsets.all(15),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
@@ -280,11 +287,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                                 hintText: '2do apellido',
                                 contentPadding: const EdgeInsets.all(15),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
@@ -315,11 +322,11 @@ class _SignupPageState extends State<SignupPageStudent> {
                           hintText: 'Contrasena',
                           contentPadding: const EdgeInsets.all(15),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -337,7 +344,7 @@ class _SignupPageState extends State<SignupPageStudent> {
                         style:
                         OutlinedButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: Colors.green,
+                            backgroundColor:  Color.fromRGBO(25,104,68, 1),
                             padding: EdgeInsets.all(13),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

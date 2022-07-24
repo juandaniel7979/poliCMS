@@ -13,12 +13,6 @@ import 'package:http/http.dart' as http;
 class HomeScreen extends StatefulWidget {
   static const route = '/HomeScreen-teacher';
 
-  final String id;
-  final String email;
-  final String nombre;
-
-  HomeScreen({required this.id, required this.email, required this.nombre});
-
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -26,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 String id="";
 String nombre="";
 String correo="";
+String rol = "";
 
   @override
   void initState() {
@@ -36,7 +31,16 @@ String correo="";
   void getUser()async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var  token = sharedPreferences.getString('token');
-    var url='http://192.168.56.1:3002/api/user/profesor';
+    var  role = sharedPreferences.getString('rol');
+    print(role);
+    var url = "";
+    if(role=="profesor"){
+      url='https://poli-cms.herokuapp.com/api/user/profesor';
+    }else if(role=="estudiante"){
+      url='https://poli-cms.herokuapp.com/api/user/estudiante';
+    }else if(role=="administrador"){
+      url='https://poli-cms.herokuapp.com/api/user/profesor';
+    }
     final response = await http.get(
         Uri.parse(url),
         headers: {
@@ -52,6 +56,7 @@ String correo="";
       id=res['id'];
       nombre=res['nombre'];
       correo=res['email'];
+      rol=res['rol'];
     });
 
 
@@ -64,6 +69,7 @@ String correo="";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         title: Text('Inicio'),
       ),
       // drawer: MainDrawer(id:widget.id,email: widget.email, nombre: widget.nombre),
@@ -101,7 +107,7 @@ String correo="";
                 style:
                 OutlinedButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: Colors.green,
+                    backgroundColor:  Color.fromRGBO(25,104,68, 1),
                     padding: EdgeInsets.symmetric(horizontal: 40,vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -110,7 +116,7 @@ String correo="";
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Explorer(id:widget.id,email: widget.email,nombre: widget.nombre))
+                      MaterialPageRoute(builder: (context) => Explorer(id:id,email: correo,nombre:nombre))
                   );
                 }
               ),

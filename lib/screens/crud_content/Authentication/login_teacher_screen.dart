@@ -43,11 +43,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
     String correo = emailController.text;
     String contrasena = passwordController.text;
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context)=>Center(child: CircularProgressIndicator()),
-    );
+
     var url ="https://poli-cms.herokuapp.com/api/user/login-profesor";
 
 
@@ -58,20 +54,18 @@ class _LoginPageState extends State<LoginPageTeacher> {
           setState(() {
             _isLoading = false;
           });
-          var nombre = jsonResponse['data']['user']['nombre']+jsonResponse['data']['user']['nombre_2']+jsonResponse['data']['user']['apellido']+jsonResponse['data']['user']['apellido_2'];
           sharedPreferences.setString("token", jsonResponse['data']['token']);
-          sharedPreferences.setString("rol", "profesor");
-          sharedPreferences.setString("nombre", nombre);
-          sharedPreferences.setString("id", jsonResponse['data']['_id']);
-          sharedPreferences.setString("correo", jsonResponse['data']['correo']);
+          if(jsonResponse['data']['user']['administrador']==1){
+            sharedPreferences.setString("rol", "administrador");
+          }else{
+            sharedPreferences.setString("rol", "profesor");
+          }
 
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(id:jsonResponse['data']['user']['_id'],email: jsonResponse['data']['user']['correo'],nombre: jsonResponse['data']['user']['nombre']+' '+jsonResponse['data']['user']['nombre_2']+' '+jsonResponse['data']['user']['apellido']+' '+jsonResponse['data']['user']['apellido_2'] )), (Route<dynamic> route) => false);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()), (Route<dynamic> route) => false);
         }
       }
       else {
-        setState(() {
-          _isLoading = false;
-        });
+
         jsonResponse = json.decode(response.body);
         showDialog(
           context: context,
@@ -98,7 +92,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68,1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -113,7 +107,7 @@ class _LoginPageState extends State<LoginPageTeacher> {
       ),
       body: Container(
         padding: const EdgeInsets.all(15),
-        color: Theme.of(context).primaryColor,
+        color: Colors.white,
         // width: double.infinity,
         width: MediaQuery.of(context).size.width,
         child: Form(
@@ -124,8 +118,9 @@ class _LoginPageState extends State<LoginPageTeacher> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Image.asset("assets/images/login.png",
-                  height: 180
+              CircleAvatar(
+                backgroundImage: AssetImage("assets/images/student-2.png"),
+                radius: 150,
               ),
               SizedBox(
                 height: 20,
@@ -145,11 +140,15 @@ class _LoginPageState extends State<LoginPageTeacher> {
                   hintText: 'Correo',
                   contentPadding: const EdgeInsets.all(15),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
@@ -171,13 +170,26 @@ class _LoginPageState extends State<LoginPageTeacher> {
                   filled: true,
                   fillColor: Colors.white,
                   hintText: 'Contrasena',
-                  contentPadding: const EdgeInsets.all(15),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green,width: 20),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  contentPadding: const EdgeInsets.all(15),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
@@ -194,13 +206,13 @@ class _LoginPageState extends State<LoginPageTeacher> {
                 ),
                   style:
                   OutlinedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor:  Color.fromRGBO(25,104,68, 1),
                       primary: Colors.white,
-                      surfaceTintColor: Colors.green,
-                      shadowColor: Colors.green,
-                      // backgroundColor: Colors.green,
+                      surfaceTintColor:  Color.fromRGBO(25,104,68, 1),
+                      shadowColor:  Color.fromRGBO(25,104,68, 1),
+                      // backgroundColor:  Color.fromRGBO(25,104,68, 1),
                       padding: EdgeInsets.all(13),
-                      side: BorderSide(color: Colors.green,width: 2),
+                      side: BorderSide(color:  Color.fromRGBO(25,104,68, 1),width: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       )
@@ -229,13 +241,13 @@ class _LoginPageState extends State<LoginPageTeacher> {
               ),
               style:
               OutlinedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor:  Color.fromRGBO(25,104,68, 1),
                   primary: Colors.white,
-                  surfaceTintColor: Colors.green,
-                  shadowColor: Colors.green,
-                  // backgroundColor: Colors.green,
+                  surfaceTintColor:  Color.fromRGBO(25,104,68, 1),
+                  shadowColor:  Color.fromRGBO(25,104,68, 1),
+                  // backgroundColor:  Color.fromRGBO(25,104,68, 1),
                   padding: EdgeInsets.all(13),
-                  side: BorderSide(color: Colors.green,width: 2),
+                  side: BorderSide(color:  Color.fromRGBO(25,104,68, 1),width: 2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   )

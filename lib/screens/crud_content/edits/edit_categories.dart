@@ -61,7 +61,7 @@ class _EditCategoryState extends State<EditCategory> {
     String description = DescriptionController.text;
     var data = {'id_categoria':widget.id_categoria,'nombre':title,'descripcion': description};
     final response = await http.put(
-        Uri.parse("http://192.168.56.1:3002/api/categoria/editar"),
+        Uri.parse("https://poli-cms.herokuapp.com/api/categoria/editar"),
         body:json.encode({'id_categoria':widget.id_categoria,'nombre':title,'descripcion': description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
@@ -116,7 +116,7 @@ class _EditCategoryState extends State<EditCategory> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor:  Color.fromRGBO(25,104,68, 1),
         title: Center(child: Text('Editar categoria'),),
         centerTitle: true,
         elevation: 0,
@@ -235,7 +235,7 @@ class _EditCategoryState extends State<EditCategory> {
                         style:
                         OutlinedButton.styleFrom(
                             primary: Colors.white,
-                            backgroundColor: Colors.green,
+                            backgroundColor:  Color.fromRGBO(25,104,68, 1),
                             padding: EdgeInsets.all(13),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

@@ -61,30 +61,16 @@ class _AddCategoryState extends State<AddCategory> {
 
 
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //         (_) => ShowCaseWidget.of(context).startShowCase([
-  //       keyOne,
-  //       keyThree,
-  //       keyFour,
-  //       keyTwo,
-  //     ]),
-  //   );
-  // }
-
   String msg = '';
   Future _AddCategory() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonResponse = null;
-    var url ="https://poli-cms.herokuapp.com/api/categoria/categoria";
+    var url ="http://192.168.56.1:3002/api/categoria/categoria";
       String title = TitleController.text;
       String Description = DescriptionController.text;
       var token= sharedPreferences.getString("token");
       var response = await http.post(Uri.parse(url),
-        body:jsonEncode({'nombre':title,'descripcion': Description,'id_profesor':widget.id}),
+        body:jsonEncode({'nombre':title,'descripcion': Description}),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'}
         );
     if(response.statusCode == 200) {
@@ -141,7 +127,7 @@ class _AddCategoryState extends State<AddCategory> {
        return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor:  Color.fromRGBO(25,104,68, 1),
           title: Center(child: Text('Añadir categoria'),),
           centerTitle: true,
           elevation: 0,
@@ -156,7 +142,7 @@ class _AddCategoryState extends State<AddCategory> {
                  key: keyThree,
                  description: 'Alguna maricada',
                  child: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.info_rounded),
                   onPressed: () {
                     startTutorial();
                   },
@@ -277,7 +263,7 @@ class _AddCategoryState extends State<AddCategory> {
                             style:
                             OutlinedButton.styleFrom(
                                 primary: Colors.white,
-                                backgroundColor: Colors.green,
+                                backgroundColor:  Color.fromRGBO(25,104,68, 1),
                                 padding: EdgeInsets.all(13),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),

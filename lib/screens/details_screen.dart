@@ -29,7 +29,7 @@ DetailsScreen({required this.email,required this.nombre});
                 fontSize: 22,
               ),
             ),
-            FloatingActionButton(
+            FloatingActionButton(backgroundColor: Color.fromRGBO(25,104,68,1),
                 child: Icon(Icons.arrow_back),
                 onPressed:(){
                   Navigator.pop(context);

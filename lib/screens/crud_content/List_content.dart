@@ -49,6 +49,7 @@ class ListContent extends StatefulWidget{
 
 
 class _ListContentState extends State<ListContent> {
+  var rol;
   late List<Content> contents =[];
   String query = '';
   Timer? debouncer;
@@ -81,6 +82,8 @@ class _ListContentState extends State<ListContent> {
   }
 
   Future init() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    rol = sharedPreferences.getString("rol");
     final contents = await ContentApi.getContent(query,widget.id_subcategoria);
     setState(() {
       this.contents=contents;
@@ -114,7 +117,7 @@ class _ListContentState extends State<ListContent> {
     var token= sharedPreferences.getString("token");
     var datos= {"id":id_categoria};
     final response = await http.put(
-        Uri.parse("http://192.168.56.1:3002/api/subcategoria/borrar"),
+        Uri.parse("https://poli-cms.herokuapp.com/api/subcategoria/borrar"),
         body:json.encode(datos),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
@@ -127,41 +130,25 @@ class _ListContentState extends State<ListContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.subcategoria),
-      ),
-      drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
-      body:Column(
-          children: [
-            buildSearch(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: contents ==null ? 0 :contents.length,
-                itemBuilder: (BuildContext context,int index){
-                  return new GestureDetector(
-                    onLongPress: (){
-                    if(widget.id ==contents[index].id_profesor){
-                      MaterialPageRoute(builder:
-                          (context) => EditContent(
-                        id:widget.id,
-                        id_profesor:contents[index].id_profesor,
-                        id_subcategoria:contents[index].id_subcategoria,
-                        id_content:contents[index].id,
-                        email: widget.email,
-                        nombre: widget.nombre,
-                        subcategoria: widget.subcategoria,
-                        descripcion:contents[index].descripcion,
-                        )
-                      );
-                    }else{
-                      null;
-                    }
-                    },
-                    onTap: (){
-                      Navigator.push(context,
+    if(rol=="administrador" || rol=="profesor"){
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(25,104,68, 1),
+          title: Text(widget.subcategoria),
+        ),
+        drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
+        body:Column(
+            children: [
+              buildSearch(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: contents ==null ? 0 :contents.length,
+                  itemBuilder: (BuildContext context,int index){
+                    return new GestureDetector(
+                      onLongPress: (){
+                        if(widget.id ==contents[index].id_profesor){
                           MaterialPageRoute(builder:
-                              (context) => DetailContent(
+                              (context) => EditContent(
                             id:widget.id,
                             id_profesor:contents[index].id_profesor,
                             id_subcategoria:contents[index].id_subcategoria,
@@ -170,105 +157,252 @@ class _ListContentState extends State<ListContent> {
                             nombre: widget.nombre,
                             subcategoria: widget.subcategoria,
                             descripcion:contents[index].descripcion,
+                          )
+                          );
+                        }else{
+                          null;
+                        }
+                      },
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) => DetailContent(
+                              id:widget.id,
+                              id_profesor:contents[index].id_profesor,
+                              id_subcategoria:contents[index].id_subcategoria,
+                              id_content:contents[index].id,
+                              email: widget.email,
+                              nombre: widget.nombre,
+                              subcategoria: widget.subcategoria,
+                              descripcion:contents[index].descripcion,
                             )
-                          ));
-                    },
-                    child: Card(
-                      child:Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: Icon(Icons.album),
-                              title: Text('Publicacion: '+contents[index].nombre,
-                                style: TextStyle(fontWeight: FontWeight.bold),),
-                              subtitle: Text('Descripcion: '+contents[index].descripcion_corta),
-                            ),
-                            Conditional.single(
-                              context: context,
-                              conditionBuilder: (BuildContext context) => contents[index].id_profesor==widget.id,
-                              widgetBuilder: (BuildContext context) => Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  TextButton(
-                                    child: const Text('EDIT'),
-                                    onPressed: () {
-                                      Navigator.push(context,MaterialPageRoute(builder: (context)=>
-                                          EditContentHeader(id: widget.id,
-                                        id_contenido:contents[index].id,
-                                        subcategoria:widget.subcategoria,
-                                        email: widget.email,
-                                        nombre: widget.nombre,
-                                        descripcion: contents[index].descripcion,
-                                        nombre_contenido: contents[index].nombre,
-                                        id_subcategoria: widget.id_subcategoria,)));
-                                    },
-                                  ),
-                                  const SizedBox(width: 8),
-                                  TextButton(
-                                    child: const Text('DELETE',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    onPressed: () => showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                            title: const Text('Eliminar'),
-                                            content: const Text('Está seguro que desea eliminar este elemento?'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(context, 'Cancel'),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                // onPressed: () => Navigator.pop(context, 'OK'),
-                                                onPressed: () {
-
-                                                  _DeleteElement(contents[index].id);
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(builder: (context) => ListContent(id:widget.id,email: widget.email,nombre: widget.nombre,id_subcategoria: widget.id_subcategoria,descripcion:widget.descripcion,subcategoria: widget.subcategoria,))
-                                                  );
-                                                },
-                                                child: const Text('OK'),
-                                              ),
-                                            ],
-                                          ),
-                                      // showAlertDialog(context,data[index]['id_subcategoria']
-                                      // );
-                                      // },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                ],
+                            ));
+                      },
+                      child: Card(
+                        child:Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.album),
+                                title: Text('Publicacion: '+contents[index].nombre+contents[index].id_profesor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),),
+                                subtitle: Text('Descripcion: '+contents[index].descripcion_corta),
                               ),
-                              fallbackBuilder: (BuildContext context) => Text(''),
-                            ),
-                          ]),
-                    ),
-                  );
+                              Conditional.single(
+                                context: context,
+                                conditionBuilder: (BuildContext context) => contents[index].id_profesor==widget.id,
+                                widgetBuilder: (BuildContext context) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      child: const Text('EDIT'),
+                                      onPressed: () {
+                                        Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                                            EditContentHeader(id: widget.id,
+                                              id_contenido:contents[index].id,
+                                              subcategoria:widget.subcategoria,
+                                              email: widget.email,
+                                              nombre: widget.nombre,
+                                              descripcion: contents[index].descripcion,
+                                              nombre_contenido: contents[index].nombre,
+                                              id_subcategoria: widget.id_subcategoria,)));
+                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    TextButton(
+                                      child: const Text('DELETE',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () => showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: const Text('Eliminar'),
+                                              content: const Text('Está seguro que desea eliminar este elemento?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  // onPressed: () => Navigator.pop(context, 'OK'),
+                                                  onPressed: () {
 
-                },
+                                                    _DeleteElement(contents[index].id);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => ListContent(id:widget.id,email: widget.email,nombre: widget.nombre,id_subcategoria: widget.id_subcategoria,descripcion:widget.descripcion,subcategoria: widget.subcategoria,))
+                                                    );
+                                                  },
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
+                                            ),
+                                        // showAlertDialog(context,data[index]['id_subcategoria']
+                                        // );
+                                        // },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                ),
+                                fallbackBuilder: (BuildContext context) => Text(''),
+                              ),
+                            ]),
+                      ),
+                    );
+
+                  },
+                ),
               ),
+            ]
+        ),
+        floatingActionButton: SpeedDial(
+          backgroundColor:  Color.fromRGBO(25,104,68, 1),
+          animatedIcon: AnimatedIcons.menu_close,
+          children: [
+            SpeedDialChild(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria)));
+                },
+                child: Icon(Icons.add),
+                label: 'Agregar contenido'
             ),
-          ]
-      ),
-      floatingActionButton: SpeedDial(
-        backgroundColor: Colors.green,
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-              onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria)));
-              },
-              child: Icon(Icons.add),
-              label: 'Agregar contenido'
-          ),
-        ],
+          ],
 
-      ),
-    );
+        ),
+      );
+    }else{
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(25,104,68, 1),
+          title: Text(widget.subcategoria),
+        ),
+        drawer: MainDrawer(id:widget.id,email:widget.email,nombre: widget.nombre),
+        body:Column(
+            children: [
+              buildSearch(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: contents ==null ? 0 :contents.length,
+                  itemBuilder: (BuildContext context,int index){
+                    return new GestureDetector(
+                      onLongPress: (){
+                        if(widget.id ==contents[index].id_profesor){
+                          MaterialPageRoute(builder:
+                              (context) => EditContent(
+                            id:widget.id,
+                            id_profesor:contents[index].id_profesor,
+                            id_subcategoria:contents[index].id_subcategoria,
+                            id_content:contents[index].id,
+                            email: widget.email,
+                            nombre: widget.nombre,
+                            subcategoria: widget.subcategoria,
+                            descripcion:contents[index].descripcion,
+                          )
+                          );
+                        }else{
+                          null;
+                        }
+                      },
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context) => DetailContent(
+                              id:widget.id,
+                              id_profesor:contents[index].id_profesor,
+                              id_subcategoria:contents[index].id_subcategoria,
+                              id_content:contents[index].id,
+                              email: widget.email,
+                              nombre: widget.nombre,
+                              subcategoria: widget.subcategoria,
+                              descripcion:contents[index].descripcion,
+                            )
+                            ));
+                      },
+                      child: Card(
+                        child:Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.album),
+                                title: Text('Publicacion: '+contents[index].nombre,
+                                  style: TextStyle(fontWeight: FontWeight.bold),),
+                                subtitle: Text('Descripcion: '+contents[index].descripcion_corta),
+                              ),
+                              Conditional.single(
+                                context: context,
+                                conditionBuilder: (BuildContext context) => contents[index].id_profesor==widget.id,
+                                widgetBuilder: (BuildContext context) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      child: const Text('EDIT'),
+                                      onPressed: () {
+                                        Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                                            EditContentHeader(id: widget.id,
+                                              id_contenido:contents[index].id,
+                                              subcategoria:widget.subcategoria,
+                                              email: widget.email,
+                                              nombre: widget.nombre,
+                                              descripcion: contents[index].descripcion,
+                                              nombre_contenido: contents[index].nombre,
+                                              id_subcategoria: widget.id_subcategoria,)));
+                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    TextButton(
+                                      child: const Text('DELETE',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () => showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: const Text('Eliminar'),
+                                              content: const Text('Está seguro que desea eliminar este elemento?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  // onPressed: () => Navigator.pop(context, 'OK'),
+                                                  onPressed: () {
+
+                                                    _DeleteElement(contents[index].id);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => ListContent(id:widget.id,email: widget.email,nombre: widget.nombre,id_subcategoria: widget.id_subcategoria,descripcion:widget.descripcion,subcategoria: widget.subcategoria,))
+                                                    );
+                                                  },
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
+                                            ),
+                                        // showAlertDialog(context,data[index]['id_subcategoria']
+                                        // );
+                                        // },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                ),
+                                fallbackBuilder: (BuildContext context) => Text(''),
+                              ),
+                            ]),
+                      ),
+                    );
+
+                  },
+                ),
+              ),
+            ]
+        ),
+      );
+    }
   }
 
 
