@@ -55,13 +55,14 @@ class _AddSubCategoryState extends State<AddSubcategory> {
 
     print(response.statusCode);
     print(response.body);
+    jsonResponse = json.decode(response.body);
+
     if(response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Se ha creado la categoria con exito"),
+            title: new Text("Se ha creado la Subtematica con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -80,12 +81,13 @@ class _AddSubCategoryState extends State<AddSubcategory> {
     }
     else {
       jsonResponse = json.decode(response.body);
-      msg="Esta categoria ya existe";
+      msg="Esta Subtematica ya existe";
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: new Text(msg),
+            content: Text(jsonResponse['message']),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -106,7 +108,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor:  Color.fromRGBO(25,104,68, 1),
-        title: Center(child: Text('Añadir subcategoria'),),
+        title: Center(child: Text('Agregar Subtematica'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -123,7 +125,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
             padding: const EdgeInsets.symmetric(
               horizontal: 30,
             ),
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
             width: double.infinity,
             child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -158,13 +160,21 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Titulo',
-                          contentPadding: const EdgeInsets.all(15),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green,width: 20),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          contentPadding: const EdgeInsets.all(15),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -192,13 +202,21 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Descripcion',
-                          contentPadding: const EdgeInsets.all(15),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green,width: 20),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          contentPadding: const EdgeInsets.all(15),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -208,7 +226,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                       ),
                       OutlinedButton(
                         child: Text(
-                          'Añadir subcategoria',
+                          'Agregar Subtematica',
                           style: TextStyle(
                               fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                           ),

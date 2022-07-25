@@ -74,7 +74,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Se ha editado la subcategoria con exito"),
+            title: new Text("Se ha editado la Subtematica con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -117,7 +117,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor:  Color.fromRGBO(25,104,68, 1),
-        title: Center(child: Text('Editar subcategoria'),),
+        title: Center(child: Text('Editar Subtematica'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -222,7 +222,7 @@ class _EditSubcategoryState extends State<EditSubcategory> {
                       ),
                       OutlinedButton(
                         child: Text(
-                          'Editar subcategoria',
+                          'Editar Subtematica',
                           style: TextStyle(
                               fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                           ),

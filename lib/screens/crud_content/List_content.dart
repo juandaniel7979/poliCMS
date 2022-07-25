@@ -203,7 +203,7 @@ class _ListContentState extends State<ListContent> {
                                               subcategoria:widget.subcategoria,
                                               email: widget.email,
                                               nombre: widget.nombre,
-                                              descripcion: contents[index].descripcion,
+                                              descripcion: contents[index].descripcion_corta,
                                               nombre_contenido: contents[index].nombre,
                                               id_subcategoria: widget.id_subcategoria,)));
                                       },
@@ -268,7 +268,7 @@ class _ListContentState extends State<ListContent> {
                       MaterialPageRoute(builder: (context) => AddContent(id:widget.id,id_subcategoria:widget.id_subcategoria,descripcion: widget.descripcion,email: widget.email,nombre: widget.nombre,subcategoria: widget.subcategoria)));
                 },
                 child: Icon(Icons.add),
-                label: 'Agregar contenido'
+                label: 'Agregar publicacion'
             ),
           ],
 

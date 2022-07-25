@@ -113,7 +113,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Explorer(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => Explorer(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),
@@ -126,7 +126,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MainDrawer(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => Listteachers(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),
@@ -139,7 +139,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyCategories(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => MyCategories(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),
@@ -214,7 +214,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Explorer(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => Explorer(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),
@@ -227,7 +227,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyCategories(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => MyCategories(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),
@@ -302,7 +302,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onTap: (){
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Explorer(id:id,email :email,nombre: nombre))
+                    MaterialPageRoute(builder: (context) => Explorer(id:widget.id,email:widget.email,nombre:widget.nombre))
                 );
               },
             ),

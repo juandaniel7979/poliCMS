@@ -128,7 +128,7 @@ class _EditContentState extends State<EditContent> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor:  Color.fromRGBO(25,104,68, 1),
-          // title: Center(child: Text('Añadir categoria'),),
+          // title: Center(child: Text('Agregar categoria'),),
           centerTitle: true,
           elevation: 0,
           leading: IconButton(
@@ -138,18 +138,21 @@ class _EditContentState extends State<EditContent> {
             },
           ),
         ),
-        body: Column(
-          children: [
-            QuillToolbar.basic(controller: _controllerEdit),
-            Expanded(
-              child: Container(
-                child: QuillEditor.basic(
-                  controller: _controllerEdit,
-                  readOnly: false, // true for view only mode
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              QuillToolbar.basic(controller: _controllerEdit),
+              Expanded(
+                child: Container(
+                  child: QuillEditor.basic(
+                    controller: _controllerEdit,
+                    readOnly: false, // true for view only mode
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       floatingActionButton: SpeedDial(
         child: Icon(Icons.add),

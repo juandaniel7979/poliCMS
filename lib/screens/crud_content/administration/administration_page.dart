@@ -70,9 +70,17 @@ class _ListteachersState extends State<Listteachers> {
         body:json.encode(datos),
         headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
     print(response.body);
+  }
 
-    // print(data[1]["nombre"]);
-
+  Future _RejectTeacher( id_profesor) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token= sharedPreferences.getString("token");
+    var datos= {"id_profesor":id_profesor};
+    final response = await http.put(
+        Uri.parse("http://192.168.56.1:3002/api/user/rechazar"),
+        body:json.encode(datos),
+        headers:  { HttpHeaders.contentTypeHeader: 'application/json','auth-token':'${token}'});
+    print(response.body);
   }
 
 
@@ -135,7 +143,9 @@ class _ListteachersState extends State<Listteachers> {
                                     TextButton(
                                       // onPressed: () => Navigator.pop(context, 'OK'),
                                       onPressed: () {
-
+                                        _RejectTeacher(teachers[index].id);
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context)=>Listteachers(email: widget.email, nombre: widget.nombre, id: widget.id)));
                                       },
                                       child: const Text('OK'),
                                     ),
@@ -169,7 +179,7 @@ class _ListteachersState extends State<Listteachers> {
               onTap: (){
               },
               child: Icon(Icons.add),
-              label: 'Añadir subcategoria'
+              label: 'Agregar Subtematica'
           )
         ],
 

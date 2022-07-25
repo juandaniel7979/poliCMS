@@ -174,7 +174,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                             children: <Widget>[
                               ListTile(
                                 leading: Icon(Icons.album),
-                                title: Text('Subcategoria: '+subcategories[index].nombre,
+                                title: Text('Subtematica: '+subcategories[index].nombre,
                                   style: TextStyle(fontWeight: FontWeight.bold),),
                                 subtitle: Text('Descripcion: '+subcategories[index].descripcion),
                               ),
@@ -260,7 +260,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                   fallbackBuilder: (BuildContext context) => Icon(Icons.launch),
                 ),
                 onLongPress: (){openDialog();},
-                label: url==""? "Añadir enlace de drive":"Redirigir a drive",
+                label: url==""? "Agregar enlace de drive":"Redirigir a drive",
                 onTap:() async{
                   if(url==""){
                     openDialog();
@@ -278,7 +278,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                   );
                 },
                 child: Icon(Icons.add),
-                label: 'Añadir subcategoria'
+                label: 'Agregar Subtematica'
             )
           ],
 
@@ -318,7 +318,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
                             children: <Widget>[
                               ListTile(
                                 leading: Icon(Icons.album),
-                                title: Text('Subcategoria: '+subcategories[index].nombre,
+                                title: Text('Subtematica: '+subcategories[index].nombre,
                                   style: TextStyle(fontWeight: FontWeight.bold),),
                                 subtitle: Text('Descripcion: '+subcategories[index].descripcion),
                               ),
@@ -401,7 +401,7 @@ class _ListSubcategoriesState extends State<ListSubcategories> {
   Widget buildSearch()=>SearchWidget(
       text: query,
       onChanged: searchSubcategory,
-      hintText: 'Titulo de la subcategoria');
+      hintText: 'Titulo de la Subtematica');
 
   void searchSubcategory(String query)async =>debounce(() async {
    final subcategorias = await SubcategoryApi.getSubcategory(query,widget.id_categoria);

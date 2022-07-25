@@ -128,7 +128,7 @@ class _AddCategoryState extends State<AddCategory> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor:  Color.fromRGBO(25,104,68, 1),
-          title: Center(child: Text('Añadir categoria'),),
+          title: Center(child: Text('Agregar categoria'),),
           centerTitle: true,
           elevation: 0,
           leading: IconButton(
@@ -153,12 +153,11 @@ class _AddCategoryState extends State<AddCategory> {
 
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 30,
               ),
-              color: Theme.of(context).primaryColor,
+              color: Colors.white,
               width: double.infinity,
               child: SingleChildScrollView(
                 child: ConstrainedBox(
@@ -196,13 +195,21 @@ class _AddCategoryState extends State<AddCategory> {
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Titulo',
-                              contentPadding: const EdgeInsets.all(15),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green,width: 20),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              contentPadding: const EdgeInsets.all(15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
@@ -235,13 +242,21 @@ class _AddCategoryState extends State<AddCategory> {
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Descripcion',
-                              contentPadding: const EdgeInsets.all(15),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green,width: 20),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              contentPadding: const EdgeInsets.all(15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
@@ -252,10 +267,10 @@ class _AddCategoryState extends State<AddCategory> {
                         ),
                         Showcase(
                           key: keyFour,
-                          description: 'Cuando estés seguro con el titulo y descripcion que decidiste, presiona en el boton',
+                          description: 'Cuando estés seguro con el titulo y descripcion que decidiste, presiona en el boton "Agregar categoria"',
                           child: OutlinedButton(
                             child: Text(
-                              'Añadir categoria',
+                              'Agregar categoria',
                               style: TextStyle(
                                   fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                               ),

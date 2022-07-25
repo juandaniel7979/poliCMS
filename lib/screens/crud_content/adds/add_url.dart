@@ -184,7 +184,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor:  Color.fromRGBO(25,104,68, 1),
-        title: Center(child: Text('Añadir subcategoria'),),
+        title: Center(child: Text('Agregar Subtematica'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -286,7 +286,7 @@ class _AddSubCategoryState extends State<AddSubcategory> {
                       ),
                       OutlinedButton(
                         child: Text(
-                          'Añadir subcategoria',
+                          'Agregar Subtematica',
                           style: TextStyle(
                               fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                           ),

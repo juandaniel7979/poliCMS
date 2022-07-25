@@ -138,7 +138,7 @@ class _AddContentState extends State<AddContent> {
       backgroundColor: Colors.blue,
       appBar: AppBar(
         backgroundColor:  Color.fromRGBO(25,104,68, 1),
-        // title: Center(child: Text('Añadir categoria'),),
+        title: Center(child: Text('Agregar Publicacion'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -148,92 +148,112 @@ class _AddContentState extends State<AddContent> {
           },
         ),
       ),
-      body: Form(
-        key: _keyForm,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
-              child: TextFormField(
-                validator: (valor){
-                  if(valor!.isEmpty){
-                    return 'Este campo no puede estar vacío';
-                  }
-                },
-              keyboardType: TextInputType.text,
-                controller: TitleController,
-              style: TextStyle(fontSize: 18, color: Colors.black54),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Titulo',
-                contentPadding: const EdgeInsets.all(8.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              ),
-            ),Container(
-              padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
-              child: TextFormField(
-                validator: (valor){
-                  if(valor!.isEmpty){
-                    return 'Este campo no puede estar vacío';
-                  }
-                },
-              keyboardType: TextInputType.text,
-                controller: DescriptionController,
-              style: TextStyle(fontSize: 18, color: Colors.black54),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Descripcion breve de la publicacion',
-                contentPadding: const EdgeInsets.all(8.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              ),
-            ),
-            Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlinedButton(onPressed: (){
-                      if(_keyForm.currentState!.validate()){
-                          _AddContent();
-                      }else{
-                        print("validacion erronea");
-                      }
-                  }, child:Texto.Text('Agregar contenido',style:Texto.TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
-                    style:
-                    OutlinedButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor:  Color.fromRGBO(25,104,68, 1),
-                        padding: EdgeInsets.all(13),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        )
-                    ),
-                    // Text('Añadir contenido',textS)
+      body: Container(
+        color: Colors.white,
+        child: Form(
+
+          key: _keyForm,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
+                child: TextFormField(
+                  validator: (valor){
+                    if(valor!.isEmpty){
+                      return 'Este campo no puede estar vacío';
+                    }
+                  },
+                keyboardType: TextInputType.text,
+                  controller: TitleController,
+                style: TextStyle(fontSize: 18, color: Colors.black54),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Titulo',
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green,width: 20),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  ],
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  contentPadding: const EdgeInsets.all(15),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                 ),
-            ),
-          ],
+                ),
+              ),Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15),
+                child: TextFormField(
+                  validator: (valor){
+                    if(valor!.isEmpty){
+                      return 'Este campo no puede estar vacío';
+                    }
+                  },
+                keyboardType: TextInputType.text,
+                  controller: DescriptionController,
+                style: TextStyle(fontSize: 18, color: Colors.black54),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Descripcion breve de la publicacion',
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green,width: 20),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  contentPadding: const EdgeInsets.all(15),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                ),
+              ),
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      OutlinedButton(onPressed: (){
+                        if(_keyForm.currentState!.validate()){
+                            _AddContent();
+                        }else{
+                          print("validacion erronea");
+                        }
+                    }, child:Texto.Text('Agregar Publicacion',style:Texto.TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
+                      style:
+                      OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor:  Color.fromRGBO(25,104,68, 1),
+                          padding: EdgeInsets.all(13),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          )
+                      ),
+                      // Text('Agregar Publicacion',textS)
+                    ),
+                    ],
+                  ),
+              ),
+            ],
+          ),
         ),
       )
     );

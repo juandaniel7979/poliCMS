@@ -77,7 +77,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Se ha editado la subcategoria con exito"),
+            title: new Text("Se ha editado la Subtematica con exito"),
             actions: <Widget>[
               ElevatedButton(
                 child: new Text("OK"),
@@ -120,7 +120,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor:  Color.fromRGBO(25,104,68, 1),
-        title: Center(child: Text('Editar subcategoria'),),
+        title: Center(child: Text('Editar publicacion'),),
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
@@ -140,7 +140,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
             padding: const EdgeInsets.symmetric(
               horizontal: 30,
             ),
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
             width: double.infinity,
             child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -175,13 +175,21 @@ class _EditContentHeaderState extends State<EditContentHeader> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Titulo',
-                          contentPadding: const EdgeInsets.all(15),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green,width: 20),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          contentPadding: const EdgeInsets.all(15),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -209,13 +217,21 @@ class _EditContentHeaderState extends State<EditContentHeader> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Descripcion',
-                          contentPadding: const EdgeInsets.all(15),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green,width: 20),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          contentPadding: const EdgeInsets.all(15),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
@@ -225,7 +241,7 @@ class _EditContentHeaderState extends State<EditContentHeader> {
                       ),
                       OutlinedButton(
                         child: Text(
-                          'Editar subcategoria',
+                          'Editar Publicacion',
                           style: TextStyle(
                               fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold
                           ),
